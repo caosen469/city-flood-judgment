@@ -43,11 +43,11 @@ from waterlogging import (
 # 配置区
 # =============================================================================
 
-# 图片目录（仅处理 .jpg 后缀，忽略同目录下的 .jfif 等其他格式）。
-IMAGE_DIR = "/Users/caosihan/Downloads/积水数据/积水图片/"
-
 # 项目根目录（scripts/ 的上一级）。
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+# 图片目录（仅处理 .jpg 后缀，忽略同目录下的 .jfif 等其他格式）。
+IMAGE_DIR = str(_PROJECT_ROOT / "data" / "images")
 
 # 结果输出目录（脚本自动创建）。
 OUTPUT_DIR = str(_PROJECT_ROOT / "batch_results")
