@@ -1,0 +1,17 @@
+# 批量测试结果（每个 (模型, 图片) 组合的研判 JSON）
+batch_results/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
+
+# 本地环境配置 / 密钥
+.env
