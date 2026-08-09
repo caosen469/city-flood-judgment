@@ -1,5 +1,12 @@
 openai>=1.52.0,<3.0.0
 
+# API + Pipeline 装配（#15）：FastAPI 端点 + SSE 流式 + 配置
+fastapi>=0.115           # POST /analyze + /analyze/stream，lifespan 装配
+sse-starlette>=2.1       # SSE（当前用 StreamingResponse；保留以便切换 EventSourceResponse）
+pydantic-settings>=2.5   # src/config.py 读环境/数据路径
+uvicorn>=0.30            # ASGI server
+httpx>=0.27              # TestClient + 高程 fallback 链
+
 # 城市数据获取（#11）：OSM 路网 + SRTM DEM
 osmnx>=2.1.1          # 南沙路网下载（Overpass API 封装）
 geopandas>=1.0.0      # GeoPackage 读写
