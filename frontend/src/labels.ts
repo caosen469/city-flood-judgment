@@ -21,7 +21,7 @@ export const LABELS: Record<string, Group> = {
     L3: 'L3 · 约 10–20 cm',
     L4: 'L4 · 约 20–30 cm',
     L5: 'L5 · 大于 30 cm',
-    LX: 'LX · 疑似积水但深度不可估',
+    LX: 'LX · 无法判断是否存在积水',
   },
   surface_condition: {
     dry: '干燥', wet: '潮湿', suspected_water: '疑似积水',

@@ -54,7 +54,7 @@ DISPLAY_LABELS: dict[str, dict[str, str]] = {
         WaterloggingLevel.L3.value: "L3：约 10–20 cm",
         WaterloggingLevel.L4.value: "L4：约 20–30 cm",
         WaterloggingLevel.L5.value: "L5：大于 30 cm",
-        WaterloggingLevel.LX.value: "LX：疑似积水但深度不可估",
+        WaterloggingLevel.LX.value: "LX：无法判断是否存在积水",
     },
     "surface_condition": {
         SurfaceCondition.DRY.value: "干燥",
