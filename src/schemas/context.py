@@ -262,7 +262,10 @@ class UrbanContext(BaseModel):
     when their data is unavailable — status + reason say so (Case D / F).
     """
 
-    query_point: QueryPoint
+    query_point: Optional[QueryPoint] = None  # None only when there was no
+    # location at all (grounding no_location / geocode_failed) — honest
+    # representation of "no point" rather than a fabricated coordinate. Relaxed
+    # from required by #13 implementation (mirrors GroundedEntity.query_point).
     blocks: list[ContextBlock] = Field(default_factory=list)
 
     # ---- typed convenience accessors (derived, not stored) ----

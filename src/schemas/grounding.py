@@ -150,7 +150,12 @@ class GroundedEntity(BaseModel):
     pipeline returns image-only analysis (PRD Case F)."""
 
     status: GroundingStatus
-    query_point: LatLon
+    # None only for the no-point unresolved reasons (no_location / geocode_failed)
+    # — there is genuinely no coordinate to carry. Resolved/grounded/ambiguous and
+    # the point-bearing unresolved reasons (out_of_buffer / outside_nansha) always
+    # set it. Relaxed from required to keep degradation honest (PRD "unknown by
+    # value", surfaced by #13 implementation).
+    query_point: Optional[LatLon] = None
     source: LocationSource
     crs: CRS = CRS.WGS84
     best_match: Optional[MatchedRoad] = None
@@ -162,6 +167,10 @@ class GroundedEntity(BaseModel):
 
     @model_validator(mode="after")
     def _status_consistency(self) -> "GroundedEntity":
+        point_bearing_reasons = {
+            UnresolvedReason.OUT_OF_BUFFER,
+            UnresolvedReason.OUTSIDE_NANSHA,
+        }
         if self.status is GroundingStatus.UNRESOLVED:
             if self.unresolved_reason is None:
                 raise ValueError(
@@ -171,7 +180,25 @@ class GroundedEntity(BaseModel):
                 raise ValueError(
                     "best_match / candidates must be empty when unresolved."
                 )
+            # out_of_buffer / outside_nansha carry the queried point; the other
+            # two reasons (no_location / geocode_failed) have no point at all.
+            if self.unresolved_reason in point_bearing_reasons:
+                if self.query_point is None:
+                    raise ValueError(
+                        "query_point is required for unresolved reason "
+                        f"{self.unresolved_reason.value}."
+                    )
+            elif self.query_point is not None:
+                raise ValueError(
+                    "query_point must be None for unresolved reason "
+                    f"{self.unresolved_reason.value}."
+                )
         else:
+            if self.query_point is None:
+                raise ValueError(
+                    "query_point is required when status is 'grounded' or "
+                    "'ambiguous'."
+                )
             if self.best_match is None:
                 raise ValueError(
                     "best_match is required when status is 'grounded' or "
