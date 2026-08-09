@@ -1,1 +1,7 @@
 openai>=1.52.0,<3.0.0
+
+# 城市数据获取（#11）：OSM 路网 + SRTM DEM
+osmnx>=2.1.1          # 南沙路网下载（Overpass API 封装）
+geopandas>=1.0.0      # GeoPackage 读写
+rasterio>=1.4         # SRTM GeoTIFF 读取/裁剪（自带 GDAL，无需系统 GDAL）
+richdem>=1.5          # 地形分析（#6 TerrainProvider：洼地填平、TPI；安装可选，仅 provider 需要）
