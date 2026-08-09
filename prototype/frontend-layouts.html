@@ -1,0 +1,481 @@
+<!doctype html>
+<!--
+  PROTOTYPE — THROWAWAY. Not production. Not the Vue scaffold.
+  Branch: prototype/9-vue-frontend-layouts  ·  Ticket: caosen469/city-flood-judgment#9
+
+  Question: 「城市积水知识理解 Demo 的前端长什么样？」
+  Plan: 三个结构性不同的布局变体，经 ?variant= 切换 + 底部浮动条 + ←/→ 键。
+        数据为 mock，但严格镜像真实 AnalysisResult 形状 (docs/openapi.yaml)
+        与 zh-CN 标签 (src/schemas/display_labels.py)，所以人能对着真实结构反应。
+
+    A — Stepper Dashboard   : 顶部三步进度条 + 左图右数据 + 证据链垂直时间线
+    B — Three Columns 看/知/判 : 三列并排，三层各自成卡，强调平行对照
+    C — Reasoning Stream     : 单列叙事流，"从看到水→理解" 故事化追溯
+
+  Mock 数据含一个 happy path 与一个 graceful-degradation (无位置) 切换，
+  用于检验降级时前端如何表达 (grounding unresolved / road block unavailable /
+  knowledge 资格门关)。后端通信 = SSE 为主、REST 兜底的决策见 ticket 结论文。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Prototype · 积水研判 Demo 前端布局</title>
+<style>
+  :root{
+    --primary:#409eff; --primary-d:#337ecc; --success:#67c23a; --warning:#e6a23c;
+    --danger:#f56c6c; --info:#909399; --border:#ebeef5; --bg:#f5f7fa;
+    --text:#303133; --text-2:#606266; --text-3:#909399;
+    --radius:6px; --shadow:0 2px 12px 0 rgba(0,0,0,.08);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+  h1,h2,h3,h4{margin:0 0 8px;font-weight:600}
+  a{color:var(--primary)}
+  .muted{color:var(--text-3)}
+  .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+  .card h3{font-size:15px}
+  .tag{display:inline-block;padding:1px 8px;border-radius:4px;font-size:12px;background:#ecf5ff;color:var(--primary);border:1px solid #d9ecff;margin:2px 4px 2px 0}
+  .tag.s{background:#f0f9eb;color:var(--success);border-color:#e1f3d8}
+  .tag.w{background:#fdf6ec;color:var(--warning);border-color:#faecd8}
+  .tag.d{background:#fef0f0;color:var(--danger);border-color:#fde2e2}
+  .tag.i{background:#f4f4f5;color:var(--info);border-color:#e9e9eb}
+  .tag.big{font-size:18px;padding:4px 12px;font-weight:600}
+  .row{display:flex;gap:16px}
+  .col{flex:1;min-width:0}
+  .kv{display:flex;gap:8px;margin:3px 0}
+  .kv .k{color:var(--text-3);min-width:92px}
+  .kv .v{color:var(--text)}
+  .btn{background:var(--primary);color:#fff;border:none;padding:8px 18px;border-radius:4px;cursor:pointer;font-size:14px}
+  .btn:hover{background:var(--primary-d)}
+  .btn.ghost{background:#fff;color:var(--primary);border:1px solid var(--primary)}
+  input,select{padding:7px 10px;border:1px solid #dcdfe6;border-radius:4px;font-size:14px;background:#fff}
+  input:focus{outline:none;border-color:var(--primary)}
+  .hero-img{width:100%;border-radius:var(--radius);display:block;border:1px solid var(--border)}
+  /* map mock */
+  .map{position:relative;background:linear-gradient(135deg,#eef4ed,#e3ecdf);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:200px}
+  .map svg{display:block;width:100%;height:200px}
+  .map .lab{position:absolute;font-size:11px;background:rgba(255,255,255,.85);padding:1px 6px;border-radius:3px;border:1px solid var(--border)}
+  /* steps */
+  .steps{display:flex;align-items:center;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .step{display:flex;align-items:center;gap:8px;color:var(--text-3)}
+  .step.done{color:var(--success)}
+  .step.active{color:var(--primary)}
+  .step .n{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid currentColor;font-size:13px;font-weight:600}
+  .step.done .n{background:var(--success);color:#fff;border-color:var(--success)}
+  .step .bar{width:48px;height:2px;background:var(--border);margin:0 10px}
+  .step.done+.bar,.bar.done{background:var(--success)}
+  /* timeline (variant A) */
+  .tl{position:relative;margin:8px 0 0 0;padding-left:22px}
+  .tl::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--border)}
+  .tl .node{position:relative;margin-bottom:12px}
+  .tl .node::before{content:"";position:absolute;left:-19px;top:4px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--primary)}
+  .tl .node.obs::before{border-color:#9c27b0}
+  .tl .node.grn::before{border-color:var(--info)}
+  .tl .node.ctx::before{border-color:var(--success)}
+  .tl .node.der::before{border-color:var(--warning)}
+  .tl .node .src{font-size:11px;color:var(--text-3)}
+  /* variant B columns */
+  .cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start}
+  .colhead{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--primary)}
+  .colhead .badge{font-size:12px;color:#fff;background:var(--primary);padding:1px 8px;border-radius:10px}
+  .mini{background:#fafbfc;border:1px solid var(--border);border-radius:4px;padding:10px;margin-bottom:10px}
+  .mini h4{font-size:13px;color:var(--text-2);margin-bottom:6px}
+  /* variant C stream */
+  .stream{max-width:760px;margin:0 auto}
+  .bubble{position:relative;padding:14px 18px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:14px}
+  .bubble .role{font-size:12px;color:var(--primary);margin-bottom:6px;font-weight:600}
+  .bubble .role.sys::before{content:"⚙ "}
+  .bubble.assess{background:linear-gradient(180deg,#fdf6ec,#fff);border-color:#f5dab1}
+  /* assessment banner */
+  .assess-banner{background:linear-gradient(180deg,#fdf6ec,#fff);border:1px solid #f5dab1;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+  .assess-banner.sev-uncertain{background:linear-gradient(180deg,#f4f4f5,#fff);border-color:#dcdfe6}
+  .assess-banner .sev{font-size:20px;font-weight:700;margin-bottom:4px}
+  /* unavailable block */
+  .unavail{opacity:.7}
+  .unavail .uh{font-size:12px;color:var(--warning)}
+  /* switcher */
+  #switcher{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#2c2c2c;color:#fff;border-radius:24px;padding:8px 8px;display:flex;align-items:center;gap:4px;box-shadow:0 6px 24px rgba(0,0,0,.3);z-index:99;font-size:13px}
+  #switcher button{background:transparent;color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px}
+  #switcher button:hover{background:rgba(255,255,255,.15)}
+  #switcher .lbl{padding:0 10px;white-space:nowrap}
+  #switcher .lbl b{color:var(--primary)}
+  /* top bar */
+  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:9}
+  .topbar .brand{font-weight:700;font-size:16px;color:var(--primary)}
+  .scenario{font-size:12px;color:var(--text-3)}
+  .scenario label{margin-left:8px;cursor:pointer}
+  .wrap{padding:20px 24px 90px}
+  .inputbar{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .thumb{width:54px;height:54px;border-radius:6px;object-fit:cover;border:1px solid var(--border)}
+  hr{border:none;border-top:1px dashed var(--border);margin:12px 0}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">🌊 积水研判 Demo <span class="muted" style="font-weight:400">— 前端原型</span></span>
+    <span class="scenario">
+      场景：
+      <label><input type="radio" name="sc" value="happy" checked> happy path（有位置，全阶段产出）</label>
+      <label><input type="radio" name="sc" value="degraded"> graceful 降级（无位置）</label>
+    </span>
+    <span class="muted" style="margin-left:auto;font-size:12px">PROTOTYPE — 非生产代码 · 真实 AnalysisResult 结构 mock</span>
+  </div>
+
+  <div class="wrap">
+    <div id="app"></div>
+  </div>
+
+  <div id="switcher">
+    <button id="prev" title="上一个变体 (←)">‹</button>
+    <span class="lbl" id="vlabel"></span>
+    <button id="next" title="下一个变体 (→)">›</button>
+  </div>
+
+<script>
+/* ── mock data ───────────────────────────────────────────────
+   镜像 docs/openapi.yaml 的 AnalysisResult；枚举码与 src/schemas 一致。 */
+// 用相对路径引用仓库内的真实样本图（双击打开本文件即解析）。
+const IMG = "../data/images/road_water1.jpg";
+
+const LABEL = {
+  phenomenon_type:{road_waterlogging:"道路积水"},
+  overall_confidence:{high:"高",medium:"中",low:"低"},
+  waterlogging_status:{present:"存在",absent:"不存在",uncertain:"不确定"},
+  waterlogging_level:{L0:"L0 无/轻微潮湿",L1:"L1 ≈0–3cm",L2:"L2 ≈3–10cm",L3:"L3 ≈10–20cm",L4:"L4 ≈20–30cm",L5:"L5 >30cm",LX:"疑似·深度不可估"},
+  surface_condition:{dry:"干燥",wet:"潮湿",suspected_water:"疑似积水",clear_water:"明确积水",unknown:"无法判断"},
+  reflection_type:{water_reflection:"水面倒影",wet_road_glare:"潮湿反光",light_glare:"灯光反射",shadow:"阴影",lens_artifact:"镜头异常",unknown:"未知"},
+  patch_coverage:{localized:"局部",moderate:"中等范围",extensive:"大范围",unknown:"未知"},
+  visual_impact_hint:{none:"无明显影响",minor:"轻微",obstructing:"覆盖道路/标线",submerging:"接近底盘",unclear:"无法判断"},
+  grounding_status:{grounded:"已定位",ambiguous:"歧义",unresolved:"未定位"},
+  confidence:{high:"高",medium:"中",low:"低"},
+  block_type:{road:"道路",elevation:"高程",terrain:"地形"},
+  availability:{available:"可用",unavailable:"不可用",uncertain:"不确定"},
+  lowness_class:{not_low:"非低洼",slightly_low:"轻微低洼",moderately_low:"中等低洼",strongly_low:"显著低洼"},
+  knowledge_type:{terrain_risk:"地形风险",road_impact:"道路通行影响"},
+  mechanism:{rule:"规则推导",llm:"模型推断"},
+  evidence_ref_type:{observation:"画面观察",grounding:"道路定位",context:"城市数据",derived:"规则派生"},
+  road_actor:{pedestrian:"行人",non_motor_vehicle:"非机动车",motor_vehicle:"机动车"},
+  road_impact_level:{low:"低",medium:"中",high:"高",severe:"严重",uncertain:"无法判断"},
+  event_severity:{ordinary_puddle:"普通局部积水",suspected_flood_significant:"疑似具内涝意义",uncertain:"不确定"},
+};
+
+function L(group, code){ return (LABEL[group]&&LABEL[group][code])||code; }
+
+/* happy path */
+const HAPPY = {
+  request_id:"a1b2c3d4",
+  image: IMG,
+  location:{lat:22.7707, lon:113.5412, raw_text:"进港大道 · 南沙"},
+  timings:{observation:3180, grounding:182, context:241, knowledge:1540},
+  observation:{
+    phenomenon_type:"road_waterlogging", overall_confidence:"medium", presence_probability:0.82,
+    observed_summary:"路面有大面积积水，覆盖一条车道，水面可见倒影；车辆缓慢通过，无明显溅起。",
+    waterlogging:{
+      status:"present", waterlogging_level:"L2",
+      depth_estimate:{value_cm:6, confidence:"medium"},
+      water_patches:[{coverage:"moderate", reflection_type:"water_reflection"}],
+      surface_condition:"clear_water",
+      visual_cues:["车道标线被淹没","水面倒影","车辆减速"],
+      reference_objects:["轿车(对比尺度)"],
+      visual_impact_hint:"obstructing",
+      visual_evidence:"积水覆盖约一条车道，标线被淹没；以邻近轿车为参照，水深估计在轮毂下沿。",
+      alternative_explanations:[], uncertainty_reasons:[],
+    },
+    meta:{observation_id:"obs_001", observed_at:"2026-08-08 14:21", source_location:{raw_text:"进港大道"}},
+  },
+  grounding:{
+    status:"grounded", source:"osmnx",
+    query_point:{lat:22.7707, lon:113.5412},
+    best_match:{osm_way_id:123456789, road_name:"进港大道", highway:"primary", bridge:false, tunnel:false, match_distance_m:8.2, confidence:"high"},
+    candidates:[{road_name:"港前大道", match_distance_m:42.0, confidence:"low"}],
+  },
+  context:{
+    query_point:{lat:22.7707, lon:113.5412},
+    blocks:[
+      {block_type:"road", availability:{status:"available"}, provenance:{source:"OSM (nansha_roads.gpkg)", data_vintage:"2026-08"},
+       road_name:"进港大道", osm_way_id:123456789, highway_class:"primary", lanes:4, bridge:false, tunnel:false, offset_distance_m:8.2},
+      {block_type:"elevation", availability:{status:"available"}, provenance:{source:"SRTM 30m", data_vintage:"2000"},
+       elevation_pt:2.1, stats:{min:0.8,max:3.4,mean:1.9,std:0.6,valid_pixels:121}},
+      {block_type:"terrain", availability:{status:"available"}, provenance:{source:"SRTM 30m + richdem TPI", data_vintage:"2000"},
+       lowness:{micro:1.1, meso:1.4, macro:0.7, composite:1.2, lowness_class:"moderately_low"}},
+    ],
+  },
+  knowledge:{
+    knowledge_items:[
+      {knowledge_type:"terrain_risk", statement:"该路段处于相对低洼区（多尺度 TPI 复合 1.2m，属中等低洼），遇强降雨易汇水。",
+       confidence:"medium", mechanism:"rule", rule_id:"terrain_tpi_moderately_low",
+       evidence:[{type:"context", ref:"terrain.lowness.composite=1.2m"},{type:"derived", ref:"lowness_class=moderately_low"}]},
+      {knowledge_type:"road_impact", statement:"积水（约6cm）覆盖一条车道，预计对机动车通行造成明显影响，行人/非机动车影响中等。",
+       confidence:"medium", mechanism:"llm", actor:"motor_vehicle", level:"high",
+       evidence:[{type:"observation", ref:"waterlogging_level=L2, depth≈6cm"},{type:"observation", ref:"visual_impact_hint=obstructing"},{type:"grounding", ref:"highway=primary, lanes=4"}]},
+    ],
+    event_assessment:{severity:"suspected_flood_significant", confidence:"medium", mechanism:"llm",
+      reasoning:"视觉证据明确（大面积积水+倒影+标线淹没），且该点处于中等低洼、为城市主干道，综合判断具有内涝意义；非单纯局部水洼。",
+      evidence:[{type:"observation", ref:"present+L2"},{type:"context", ref:"lowness_class=moderately_low"},{type:"grounding", ref:"primary road"}]},
+    explanation:"综合画面观察与城市数据：进港大道（主干道）该路段为中等低洼区，当前积水约6cm覆盖一条车道，判断为疑似具内涝意义的积水事件，建议关注后续降雨与排水。",
+  },
+};
+
+/* degraded: 无位置 → grounding unresolved → road block unavailable → 关 RoadImpact 门 */
+const DEGRADED = {
+  request_id:"b2c3d4e5",
+  image: IMG,
+  location:null,
+  timings:{observation:3110, grounding:12, context:40, knowledge:920},
+  observation:{...HAPPY.observation, meta:{...HAPPY.observation.meta, source_location:{}}},
+  grounding:{status:"unresolved", source:"-", query_point:null, unresolved_reason:"no_location", best_match:null, candidates:[]},
+  context:{
+    query_point:null,
+    blocks:[
+      {block_type:"road", availability:{status:"unavailable", reason:"grounding unresolved — 无道路可挂接"}, provenance:{source:"-"}, },
+      {block_type:"elevation", availability:{status:"unavailable", reason:"无点位"}, provenance:{source:"-"}},
+      {block_type:"terrain", availability:{status:"unavailable", reason:"无点位"}, provenance:{source:"-"}},
+    ],
+  },
+  knowledge:{
+    knowledge_items:[],  // 资格门：TerrainRisk/ RoadImpact 均依赖 context/grounding，缺失不产出
+    event_assessment:{severity:"uncertain", confidence:"low", mechanism:"llm",
+      reasoning:"仅凭画面可见积水（L2），但缺少位置与城市数据，无法判断是否处低洼区、是否为主干道，事件级别不确定。",
+      evidence:[{type:"observation", ref:"present+L2"}]},
+    explanation:"未提供位置，无法进行道路挂接与城市数据装配；仅基于图像给出视觉层面的积水判断，事件意义待补充位置后复核。",
+  },
+};
+
+function currentResult(){
+  return document.querySelector('input[name=sc]:checked').value === "degraded" ? DEGRADED : HAPPY;
+}
+
+/* ── shared bits ── */
+function tagForLevel(lvl){ // L0..L5
+  const sev={L0:"s",L1:"s",L2:"",L3:"w",L4:"d",L5:"d",LX:"w"};
+  return `<span class="tag ${sev[lvl]||""} big">${L("waterlogging_level",lvl)}</span>`;
+}
+function mapMock(r){
+  const grounded = r.grounding.status==="grounded";
+  const road = grounded ? r.grounding.best_match.road_name : "（未定位）";
+  return `<div class="map">
+    <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+      <defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0 L0 0 0 20" fill="none" stroke="#d8e2d0" stroke-width="1"/></pattern></defs>
+      <rect width="400" height="200" fill="url(#g)"/>
+      <path d="M0 130 Q 120 80 240 110 T 400 70" fill="none" stroke="#f0c040" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+      <path d="M0 130 Q 120 80 240 110 T 400 70" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="10 10"/>
+      <path d="M40 200 L 200 20 L 360 200" fill="none" stroke="#a0a0a0" stroke-width="6" opacity="0.4"/>
+      ${grounded?`<circle cx="200" cy="110" r="9" fill="#f56c6c" stroke="#fff" stroke-width="3"/>
+       <circle cx="200" cy="110" r="20" fill="#f56c6c" opacity="0.18"/>`:`<text x="200" y="110" text-anchor="middle" fill="#909399" font-size="13">⚠ 无位置</text>`}
+    </svg>
+    <span class="lab" style="left:8px;top:8px">${grounded?`OSM way ${r.grounding.best_match.osm_way_id}`:"未挂接道路"}</span>
+    <span class="lab" style="right:8px;bottom:8px">${road}</span>
+  </div>`;
+}
+function observationCard(o){
+  const w=o.waterlogging;
+  return `<div class="card">
+    <h3>🟦 Stage 1 · 我所见 What I See <span class="muted" style="font-size:12px">— Observation</span></h3>
+    <div class="kv"><span class="k">现象类型</span><span class="v">${L("phenomenon_type",o.phenomenon_type)}</span></div>
+    <div class="kv"><span class="k">积水状态</span><span class="v">${L("waterlogging_status",w.status)} · ${tagForLevel(w.waterlogging_level)}</span></div>
+    <div class="kv"><span class="k">深度估计</span><span class="v">${w.depth_estimate?`${w.depth_estimate.value_cm} cm（置信度 ${L("overall_confidence",w.depth_estimate.confidence)}）`:"—"}</span></div>
+    <div class="kv"><span class="k">路面状态</span><span class="v">${L("surface_condition",w.surface_condition)} · ${w.water_patches.map(p=>L("patch_coverage",p.coverage)+" / "+L("reflection_type",p.reflection_type)).join("，")}</span></div>
+    <div class="kv"><span class="k">视觉影响</span><span class="v">${L("visual_impact_hint",w.visual_impact_hint)}</span></div>
+    <div class="kv"><span class="k">视觉线索</span><span class="v">${w.visual_cues.map(c=>`<span class="tag">${c}</span>`).join("")}</span></div>
+    <div class="kv"><span class="k">总体置信度</span><span class="v">${L("overall_confidence",o.overall_confidence)}（检出概率 ${(o.presence_probability*100)|0}%）</span></div>
+    <hr><div class="muted">${o.observed_summary}</div>
+    <div class="muted" style="font-size:12px;margin-top:6px">视觉证据：${w.visual_evidence}</div>
+  </div>`;
+}
+function contextBlocks(r){
+  const avail = (b)=> b.availability.status==="available";
+  return r.context.blocks.map(b=>{
+    const ok = avail(b);
+    const title = L("block_type",b.block_type);
+    let body="";
+    if(b.block_type==="road")
+      body = ok ? `<div class="kv"><span class="k">道路</span><span class="v">${b.road_name} · ${b.highway_class} · ${b.lanes}车道 · 偏移 ${b.offset_distance_m}m</span></div>` : "";
+    if(b.block_type==="elevation")
+      body = ok ? `<div class="kv"><span class="k">点高程</span><span class="v">${b.elevation_pt} m</span></div>
+                <div class="kv"><span class="k">邻域统计</span><span class="v">min ${b.stats.min} / max ${b.stats.max} / mean ${b.stats.mean} / σ ${b.stats.std}（${b.stats.valid_pixels} 像素）</span></div>` : "";
+    if(b.block_type==="terrain")
+      body = ok ? `<div class="kv"><span class="k">低洼等级</span><span class="v"><span class="tag w">${L("lowness_class",b.lowness.lowness_class)}</span></span></div>
+                <div class="kv"><span class="k">多尺度 TPI</span><span class="v">micro ${b.lowness.micro} / meso ${b.lowness.meso} / macro ${b.lowness.macro} / 复合 ${b.lowness.composite} m</span></div>` : "";
+    return `<div class="mini ${ok?"":"unavail"}">
+      <h4>${title} ${ok?`<span class="tag s" style="float:right">${L("availability",b.availability.status)}</span>`:`<span class="tag w" style="float:right">${L("availability",b.availability.status)}</span>`}</h4>
+      ${ok?body:`<div class="uh">⚠ ${b.availability.reason||"不可用"}</div>`}
+      ${ok?`<div class="muted" style="font-size:11px">来源：${b.provenance.source}（${b.provenance.data_vintage}）</div>`:""}
+    </div>`;
+  }).join("");
+}
+function knowledgeView(r){
+  const k=r.knowledge;
+  const items = k.knowledge_items.map(it=>{
+    const extra = it.knowledge_type==="road_impact" ? ` · ${L("road_actor",it.actor)} → <span class="tag ${it.level==='severe'||it.level==='high'?'d':it.level==='medium'?'w':'s'}">${L("road_impact_level",it.level)}</span>` : "";
+    const ev = it.evidence.map(e=>`<span class="tag i">${L("evidence_ref_type",e.type)}: ${e.ref}</span>`).join(" ");
+    return `<div class="mini">
+      <h4>${it.knowledge_type==="terrain_risk"?"⛰":"🚗"} ${L("knowledge_type",it.knowledge_type)}${extra} <span class="tag ${it.mechanism==='rule'?'s':'w'}" style="float:right">${L("mechanism",it.mechanism)}${it.rule_id?` · ${it.rule_id}`:""}</span></h4>
+      <div>${it.statement}</div>
+      <div style="margin-top:6px;font-size:12px">${ev}</div>
+      <div class="muted" style="font-size:11px;margin-top:4px">置信度 ${L("overall_confidence",it.confidence)}</div>
+    </div>`;
+  }).join("") || `<div class="muted" style="padding:8px">（资格门关闭：依赖的 context/grounding 缺失，本轮无知识条目产出）</div>`;
+
+  const ea=k.event_assessment;
+  const sevClass = ea.severity==="uncertain"?"sev-uncertain":"";
+  const sevTag = ea.severity==="suspected_flood_significant"?"d":ea.severity==="uncertain"?"i":"s";
+  return `
+    <div class="assess-banner ${sevClass}">
+      <div class="sev"><span class="tag ${sevTag} big">事件判定：${L("event_severity",ea.severity)}</span> <span class="muted" style="font-size:13px">${L("mechanism",ea.mechanism)} · 置信度 ${L("overall_confidence",ea.confidence)}</span></div>
+      <div class="muted" style="margin-top:6px">${ea.reasoning}</div>
+    </div>
+    ${items}
+    <div class="card"><h3>📝 综合解释</h3><div class="muted">${k.explanation}</div></div>`;
+}
+
+/* evidence-chain timeline (variant A) — 按证据来源类型着色 */
+function evidenceTimeline(r){
+  const nodes=[];
+  r.observation.waterlogging && nodes.push({t:"obs",src:"画面观察 · Observation",txt:`积水 ${L("waterlogging_status",r.observation.waterlogging.status)} / ${L("waterlogging_level",r.observation.waterlogging.waterlogging_level)} / 影响=${L("visual_impact_hint",r.observation.waterlogging.visual_impact_hint)}`});
+  if(r.grounding.status==="grounded") nodes.push({t:"grn",src:"道路定位 · Grounding",txt:`${r.grounding.best_match.road_name}（${r.grounding.best_match.highway}, 偏移 ${r.grounding.best_match.match_distance_m}m）`});
+  const tBlk=r.context.blocks.find(b=>b.block_type==="terrain"&&b.availability.status==="available");
+  if(tBlk) nodes.push({t:"ctx",src:"城市数据 · Terrain TPI",txt:`复合 ${tBlk.lowness.composite}m → ${L("lowness_class",tBlk.lowness.lowness_class)}`});
+  r.knowledge.knowledge_items.forEach(it=>{
+    if(it.mechanism==="rule") nodes.push({t:"der",src:"规则派生 · Derived",txt:`${L("knowledge_type",it.knowledge_type)} ← ${it.rule_id}`});
+  });
+  if(r.knowledge.event_assessment) nodes.push({t:"der",src:"模型推断 · Event Assessment",txt:`判定 ${L("event_severity",r.knowledge.event_assessment.severity)}`});
+  return `<div class="card"><h3>🔗 Evidence Chain（追溯）</h3><div class="tl">
+    ${nodes.map(n=>`<div class="node ${n.t}"><div class="src">${n.src}</div><div>${n.txt}</div></div>`).join("")}
+  </div></div>`;
+}
+
+/* input bar mock */
+function inputBar(r){
+  const loc = r.location ? `${r.location.raw_text} <span class="muted">(${r.location.lat}, ${r.location.lon})</span>` : `<span class="muted">（未提供位置）</span>`;
+  return `<div class="inputbar">
+    <img class="thumb" src="${r.image}" alt="">
+    <div style="flex:1;min-width:180px"><b>图片</b> road_water1.jpg <span class="muted">· 位置 ${loc}</span></div>
+    <input placeholder="位置：道路名 / 经纬度 / OSD 地名" style="flex:1;min-width:200px" ${r.location?`value="${r.location.raw_text}"`:""}>
+    <button class="btn">🔍 分析</button>
+  </div>`;
+}
+
+/* ── VARIANT A — Stepper Dashboard ── */
+function renderA(r){
+  const stages = [
+    {k:"observation",label:"What I See · 我所见",t:r.timings.observation},
+    {k:"grounding",label:"What I Know · 我所知",t:r.timings.grounding+r.timings.context},
+    {k:"knowledge",label:"What It Means · 这意味着",t:r.timings.knowledge},
+  ];
+  return inputBar(r) +
+  `<div class="steps">${stages.map((s,i)=>`
+    <div class="step done"><div class="n">${i+1}</div><div><div>${s.label}</div><div class="muted" style="font-size:11px">${s.t} ms</div></div></div>
+    ${i<2?`<div class="bar done"></div>`:""}`).join("")}</div>
+  <div class="row">
+    <div class="col" style="flex:0 0 38%">
+      <div class="card" style="padding:8px"><img class="hero-img" src="${r.image}"></div>
+      <div class="card" style="padding:8px">${mapMock(r)}</div>
+      <div class="card"><h3>⏱ 阶段耗时</h3>${Object.entries(r.timings).map(([k,v])=>`<div class="kv"><span class="k">${k}</span><span class="v">${v} ms</span></div>`).join("")}</div>
+    </div>
+    <div class="col">
+      ${observationCard(r.observation)}
+      <div class="card"><h3>🟩 Stage 2 · 我所知 What I Know</h3>
+        <div class="kv"><span class="k">定位</span><span class="v"><span class="tag ${r.grounding.status==='grounded'?'s':'w'}">${L("grounding_status",r.grounding.status)}</span> ${r.grounding.status==='grounded'?`（${r.grounding.best_match.match_distance_m}m, ${L("confidence",r.grounding.best_match.confidence)}）`:`${r.grounding.unresolved_reason||""}`}</span></div>
+        ${contextBlocks(r)}
+      </div>
+      <div class="card"><h3>🟧 Stage 3 · 这意味着 What It Means</h3>${knowledgeView(r)}</div>
+      ${evidenceTimeline(r)}
+    </div>
+  </div>`;
+}
+
+/* ── VARIANT B — Three Columns ── */
+function renderB(r){
+  return inputBar(r) +
+  `<div class="cols3">
+    <div>
+      <div class="colhead"><span class="badge">1</span><b>我所见 · What I See</b></div>
+      <div class="card" style="padding:8px"><img class="hero-img" src="${r.image}"></div>
+      <div class="card" style="text-align:center">
+        ${tagForLevel(r.observation.waterlogging.waterlogging_level)}
+        <div class="muted" style="margin-top:6px">${L("surface_condition",r.observation.waterlogging.surface_condition)} · ${L("visual_impact_hint",r.observation.waterlogging.visual_impact_hint)}</div>
+        <hr><div style="text-align:left">${r.observation.observed_summary}</div>
+      </div>
+      <div class="card"><h3>关键观察</h3>${r.observation.waterlogging.visual_cues.map(c=>`<span class="tag">${c}</span>`).join("")}
+        <div class="muted" style="font-size:12px;margin-top:6px">置信度 ${L("overall_confidence",r.observation.overall_confidence)} · ${(r.observation.presence_probability*100)|0}%</div></div>
+    </div>
+    <div>
+      <div class="colhead"><span class="badge">2</span><b>我所知 · What I Know</b></div>
+      <div class="card" style="padding:8px">${mapMock(r)}</div>
+      ${contextBlocks(r)}
+      <div class="card"><h3>定位</h3><span class="tag ${r.grounding.status==='grounded'?'s':'w'}">${L("grounding_status",r.grounding.status)}</span>
+        ${r.grounding.status==='grounded'?`<div class="muted" style="margin-top:6px">${r.grounding.best_match.road_name} · 偏移 ${r.grounding.best_match.match_distance_m}m</div>`:`<div class="muted" style="margin-top:6px">${r.grounding.unresolved_reason||""}</div>`}</div>
+    </div>
+    <div>
+      <div class="colhead"><span class="badge">3</span><b>这意味着 · What It Means</b></div>
+      ${knowledgeView(r)}
+      <div class="card"><h3>证据链</h3>
+        ${(()=>{const ns=[];r.observation.waterlogging&&ns.push("画面观察");r.grounding.status==="grounded"&&ns.push("道路定位");r.context.blocks.some(b=>b.availability.status==="available")&&ns.push("城市数据");r.knowledge.knowledge_items.some(i=>i.mechanism==="rule")&&ns.push("规则派生");return ns.map(n=>`<span class="tag i">${n}</span>`).join(" ");})()}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── VARIANT C — Reasoning Stream ── */
+function renderC(r){
+  const grounded=r.grounding.status==="grounded";
+  return `<div class="stream">
+    <div class="inputbar"><img class="thumb" src="${r.image}"><div style="flex:1"><b>road_water1.jpg</b> <span class="muted">${r.location?`· ${r.location.raw_text}`:"· 无位置"}</span></div><input ${r.location?`value="${r.location.raw_text}"`:""} placeholder="位置…" style="flex:1"><button class="btn">🔍 分析</button></div>
+
+    <div class="bubble"><div class="role sys">Stage 1 · 我先看看这张图…</div>
+      <img class="hero-img" src="${r.image}" style="max-height:260px;object-fit:cover">
+      ${observationCard(r.observation).replace('<div class="card">','<div style="margin-top:12px;border:1px dashed var(--border);border-radius:6px;padding:12px">')}
+    </div>
+
+    <div class="bubble"><div class="role sys">Stage 2 · 结合位置与城市数据…</div>
+      ${grounded?`<div class="kv"><span class="k">挂接到</span><span class="v"><b>${r.grounding.best_match.road_name}</b>（${r.grounding.best_match.highway}，偏移 ${r.grounding.best_match.match_distance_m}m）</span></div>`:`<div class="uh">⚠ 未提供位置，跳过道路挂接</div>`}
+      <div style="margin-top:8px">${mapMock(r)}</div>
+      ${contextBlocks(r)}
+    </div>
+
+    <div class="bubble"><div class="role sys">Stage 3 · 所以我的判断是…</div>
+      ${knowledgeView(r)}
+      ${evidenceTimeline(r)}
+    </div>
+
+    <div class="bubble assess"><div class="role sys">综合判定</div>
+      <div class="sev"><span class="tag ${r.knowledge.event_assessment.severity==='suspected_flood_significant'?'d':'i'} big">事件判定：${L("event_severity",r.knowledge.event_assessment.severity)}</span></div>
+      <div class="muted" style="margin-top:6px">${r.knowledge.event_assessment.reasoning}</div>
+    </div>
+  </div>`;
+}
+
+/* ── router / switcher ── */
+const VARIANTS=[
+  {key:"A",name:"Stepper Dashboard",render:renderA},
+  {key:"B",name:"Three Columns 看/知/判",render:renderB},
+  {key:"C",name:"Reasoning Stream",render:renderC},
+];
+function curKey(){ return new URLSearchParams(location.search).get("variant")||"A"; }
+function render(){
+  const key=curKey();
+  const v=VARIANTS.find(x=>x.key===key)||VARIANTS[0];
+  document.getElementById("app").innerHTML = v.render(currentResult());
+  document.getElementById("vlabel").innerHTML = `<b>${v.key}</b> — ${v.name}`;
+}
+function cycle(d){
+  const i=VARIANTS.findIndex(v=>v.key===curKey());
+  const n=VARIANTS[(i+d+VARIANTS.length)%VARIANTS.length];
+  const u=new URL(location); u.searchParams.set("variant",n.key); history.replaceState(null,"",u);
+  render();
+}
+document.getElementById("next").onclick=()=>cycle(1);
+document.getElementById("prev").onclick=()=>cycle(-1);
+document.addEventListener("keydown",e=>{
+  const tag=(e.target&&e.target.tagName)||"";
+  if(/INPUT|TEXTAREA/.test(tag)|| (e.target&&e.target.isContentEditable)) return;
+  if(e.key==="ArrowRight") cycle(1);
+  if(e.key==="ArrowLeft") cycle(-1);
+});
+document.querySelectorAll('input[name=sc]').forEach(r=>r.addEventListener("change",render));
+render();
+</script>
+</body>
+</html>
