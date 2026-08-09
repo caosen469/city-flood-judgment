@@ -1,0 +1,264 @@
+/* premium 主题 tokens（#9 锁定的高级感）。
+   暖米白底 + 衬线标题 + 金铜点缀 + 细线大留白。
+   通过 CSS 变量 + Element Plus 主题覆写（--el-*）一次性表达，无需运行时主题逻辑。 */
+
+:root {
+  /* —— 品牌 / 语义色 —— */
+  --c-bg: #f4f1ea;
+  --c-card: #fffdf8;
+  --c-text: #1f1b16;
+  --c-text-2: #5b5043;
+  --c-text-3: #8a7d6b;
+  --c-border: #e6dfcf;
+  --c-primary: #9a7b3f;
+  --c-primary-d: #7e6232;
+  --c-success: #6b7f4e;
+  --c-warning: #b07b2e;
+  --c-danger: #9a4a3a;
+  --c-info: #7b6f5e;
+  --c-radius: 4px;
+  --c-shadow: 0 1px 3px rgba(60, 45, 20, 0.07);
+  --c-shadow-lg: 0 4px 16px rgba(60, 45, 20, 0.1);
+  --serif: Georgia, "Songti SC", "Noto Serif SC", "STSong", serif;
+
+  /* —— Element Plus 主题覆写 —— */
+  --el-color-primary: #9a7b3f;
+  --el-color-primary-light-3: #b59b6a;
+  --el-color-primary-light-5: #ccc0a0;
+  --el-color-primary-light-7: #e2d9c4;
+  --el-color-primary-light-8: #efe9da;
+  --el-color-primary-light-9: #f5f1e8;
+  --el-color-primary-dark-2: #7e6232;
+  --el-color-success: #6b7f4e;
+  --el-color-warning: #b07b2e;
+  --el-color-danger: #9a4a3a;
+  --el-color-info: #7b6f5e;
+  --el-bg-color: #fffdf8;
+  --el-bg-color-page: #f4f1ea;
+  --el-fill-color-blank: #fffdf8;
+  --el-fill-color-light: #f7f3ea;
+  --el-border-color: #e6dfcf;
+  --el-border-color-light: #efe9da;
+  --el-border-color-lighter: #f0ead9;
+  --el-text-color-primary: #1f1b16;
+  --el-text-color-regular: #5b5043;
+  --el-text-color-secondary: #8a7d6b;
+  --el-text-color-placeholder: #b0a48f;
+  --el-border-radius-base: 4px;
+  --el-font-family: -apple-system, "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, .serif {
+  font-family: var(--serif);
+  letter-spacing: 0.4px;
+}
+
+a {
+  color: var(--c-primary);
+}
+
+.muted {
+  color: var(--c-text-3);
+}
+
+.text-2 {
+  color: var(--c-text-2);
+}
+
+/* —— 通用卡片（顶端细金线 = premium 标志）—— */
+.card {
+  background: var(--c-card);
+  border: 1px solid var(--c-border);
+  border-top: 2px solid var(--c-primary);
+  border-radius: var(--c-radius);
+  padding: 16px;
+  box-shadow: var(--c-shadow);
+}
+.card + .card {
+  margin-top: 14px;
+}
+.card h3 {
+  font-size: 15px;
+  margin: 0 0 10px;
+  color: var(--c-text);
+}
+
+/* mini 子卡片（更轻） */
+.mini {
+  background: #faf6ec;
+  border: 1px solid var(--c-border);
+  border-radius: var(--c-radius);
+  padding: 10px 12px;
+}
+.mini + .mini {
+  margin-top: 8px;
+}
+.mini h4 {
+  font-family: -apple-system, "PingFang SC", sans-serif;
+  font-size: 12.5px;
+  letter-spacing: 0;
+  margin: 0 0 6px;
+  color: var(--c-text-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mini.unavail {
+  opacity: 0.72;
+}
+.uh {
+  font-size: 12px;
+  color: var(--c-warning);
+}
+
+.kv {
+  display: flex;
+  gap: 8px;
+  margin: 3px 0;
+  font-size: 13px;
+}
+.kv .k {
+  color: var(--c-text-3);
+  min-width: 88px;
+  flex-shrink: 0;
+}
+.kv .v {
+  color: var(--c-text);
+}
+
+hr.thin {
+  border: none;
+  border-top: 1px dashed var(--c-border);
+  margin: 12px 0;
+}
+
+/* —— 列头 —— */
+.colhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--c-primary);
+}
+.colhead .badge {
+  font-size: 12px;
+  color: #fff;
+  background: var(--c-primary);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, sans-serif;
+  letter-spacing: 0;
+}
+.colhead b {
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* —— 证据流（横向）—— */
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 6px;
+}
+.fnode {
+  border: 1px solid var(--c-border);
+  border-left-width: 3px;
+  border-radius: var(--c-radius);
+  padding: 7px 10px;
+  font-size: 12px;
+  background: #faf6ec;
+  min-width: 100px;
+  max-width: 240px;
+  line-height: 1.45;
+}
+.fnode .ftype {
+  font-weight: 600;
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+.fnode .fline {
+  color: var(--c-text-2);
+}
+.farrow {
+  display: flex;
+  align-items: center;
+  color: var(--c-text-3);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* —— 事件判定 banner —— */
+.assess-banner {
+  background: linear-gradient(180deg, #f6efe0, var(--c-card));
+  border: 1px solid #d9c79a;
+  border-top: 2px solid var(--c-primary);
+  border-radius: var(--c-radius);
+  padding: 14px 16px;
+}
+.assess-banner.sev-uncertain {
+  background: linear-gradient(180deg, #efeadc, var(--c-card));
+  border-color: #d8cfb8;
+}
+.assess-banner.sev-ordinary {
+  background: linear-gradient(180deg, #eef0e4, var(--c-card));
+  border-color: #cfd6bd;
+}
+.assess-banner .sev {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* —— 列骨架占位（阶段未到）—— */
+.placeholder {
+  border: 1px dashed var(--c-border);
+  border-radius: var(--c-radius);
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--c-text-3);
+  background: transparent;
+}
+
+/* —— 滚动条收敛 —— */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #ddd1b6;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

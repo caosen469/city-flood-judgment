@@ -113,3 +113,12 @@ python -m unittest tests.test_thinking_mode -v
 项目远景（见原项目 `motivation.md`）：面向广州南沙智慧城市运维，用监控视频/图片数据识别道路内涝点位。当前基于反光率的算法无法区分小水坑与严重积水，本方案通过大模型（视觉 Qwen 系列）+ 精心设计的 prompt 做研判；后续可基于多源数据融合（摄像头地点数据 → 政务内涝台账 / 水位数据，经 API 或 MCP 接入），将额外上下文拼入 prompt，提升研判准确率。
 
 原项目 `.scratch/web-service/` 中还规划了把研判能力做成网页端服务（FastAPI + 前端 Demo）的方案，含 05 API Key 管理、06 前端原型、07 本地运行等待办事项，可作为后续开发参考。
+
+## Web Demo（Vue + FastAPI）
+
+本仓库已落地完整的 Web Demo：FastAPI 后端（`src/api/`）+ Vue 3 前端（`frontend/`）。
+图像 → Observation → Grounding/Urban Context → Knowledge Engine → 分阶段展示。
+
+- 后端：`python -m uvicorn src.api.app:create_app --factory --reload --port 8000`
+- 前端：`cd frontend && npm install && npm run dev`（详见 [`frontend/README.md`](frontend/README.md)）
+- 契约与架构决策：`docs/openapi.yaml`、`docs/architecture.md`、`docs/adr/`

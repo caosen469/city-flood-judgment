@@ -1,0 +1,28 @@
+{
+  "name": "nansha-waterlogging-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vue 3 + Element Plus 前端 — 南沙积水研判 Demo (wayfinder #16). 落地 #9 原型锁定的 B 三列 + premium + 横向证据流设计。",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "element-plus": "^2.9.1",
+    "leaflet": "^1.9.4",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.14",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vue-tsc": "^2.1.10"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  }
+}
