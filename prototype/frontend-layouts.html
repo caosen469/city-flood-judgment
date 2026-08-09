@@ -3,18 +3,16 @@
   PROTOTYPE — THROWAWAY. Not production. Not the Vue scaffold.
   Branch: prototype/9-vue-frontend-layouts  ·  Ticket: caosen469/city-flood-judgment#9
 
-  Question: 「城市积水知识理解 Demo 的前端长什么样？」
-  Plan: 三个结构性不同的布局变体，经 ?variant= 切换 + 底部浮动条 + ←/→ 键。
-        数据为 mock，但严格镜像真实 AnalysisResult 形状 (docs/openapi.yaml)
-        与 zh-CN 标签 (src/schemas/display_labels.py)，所以人能对着真实结构反应。
+  Question: 布局已锁定 = B（三列 看/知/判 + 横向证据流）。本轮：同一 B 布局上的三种视觉风格。
+  Plan: ?style=premium|cockpit|minimal 经浮动条 + ←/→ 切换；body[data-theme] 换肤。
+        布局逻辑 renderB 不变，纯 CSS 变量 + 元素级覆盖换风格。
+        数据为 mock，严格镜像真实 AnalysisResult (docs/openapi.yaml) 与 zh-CN 标签。
 
-    A — Stepper Dashboard   : 顶部三步进度条 + 左图右数据 + 证据链垂直时间线
-    B — Three Columns 看/知/判 : 三列并排，三层各自成卡，强调平行对照
-    C — Reasoning Stream     : 单列叙事流，"从看到水→理解" 故事化追溯
+    premium — 高级感：暖米白底 + 衬线标题 + 金铜点缀 + 细线大留白
+    cockpit — 驾驶舱：深色作战面板 + 青橙霓虹 + 等宽字 + HUD 网格 + 发光
+    minimal — 极简：纯白 + 无边框软阴影 + 大圆角 + 靛蓝点缀
 
-  Mock 数据含一个 happy path 与一个 graceful-degradation (无位置) 切换，
-  用于检验降级时前端如何表达 (grounding unresolved / road block unavailable /
-  knowledge 资格门关)。后端通信 = SSE 为主、REST 兜底的决策见 ticket 结论文。
+  历史：?variant=A|B|C 三个布局变体仍在 git 历史中（A Stepper / C Stream 已落选）。
 -->
 <html lang="zh-CN">
 <head>
@@ -116,6 +114,61 @@
   .inputbar{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
   .thumb{width:54px;height:54px;border-radius:6px;object-fit:cover;border:1px solid var(--border)}
   hr{border:none;border-top:1px dashed var(--border);margin:12px 0}
+
+  /* ════════════ 视觉风格（同一 B 布局，data-theme 换肤）════════════ */
+
+  /* premium · 高级感 */
+  [data-theme="premium"] body{background:#f4f1ea}
+  [data-theme="premium"]{--card-bg:#fffdf8;--text:#1f1b16;--text-2:#5b5043;--text-3:#8a7d6b;--border:#e6dfcf;--primary:#9a7b3f;--primary-d:#7e6232;--success:#6b7f4e;--warning:#b07b2e;--danger:#9a4a3a;--info:#7b6f5e;--radius:4px;--shadow:0 1px 3px rgba(60,45,20,.07)}
+  [data-theme="premium"] .card,[data-theme="premium"] .inputbar,[data-theme="premium"] .steps{background:var(--card-bg)}
+  [data-theme="premium"] h1,[data-theme="premium"] h2,[data-theme="premium"] h3,[data-theme="premium"] h4,[data-theme="premium"] .brand{font-family:Georgia,"Songti SC","Noto Serif SC",serif;letter-spacing:.4px}
+  [data-theme="premium"] .card{border-top:2px solid var(--primary)}
+  [data-theme="premium"] .colhead{border-bottom-color:var(--primary)}
+  [data-theme="premium"] .tag{background:#f0e9d8;color:#7e6232;border-color:#e0d5b8}
+  [data-theme="premium"] .tag.s{background:#eef0e4;color:#5e703f;border-color:#dde0cc}
+  [data-theme="premium"] .tag.w{background:#f5ebd9;color:#8a5e1f;border-color:#ecd9b8}
+  [data-theme="premium"] .tag.d{background:#f3e3df;color:#8a3a2c;border-color:#e6cac1}
+  [data-theme="premium"] .tag.i{background:#eee9e0;color:#6f6253;border-color:#ddd5c6}
+  [data-theme="premium"] .assess-banner{background:linear-gradient(180deg,#f6efe0,#fffdf8);border-color:#d9c79a}
+  [data-theme="premium"] .btn{background:var(--primary)}
+
+  /* cockpit · 驾驶舱 */
+  [data-theme="cockpit"] body{background:#070b12;background-image:linear-gradient(rgba(54,224,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(54,224,255,.045) 1px,transparent 1px);background-size:26px 26px;color:#cfe3ee;font-family:"SF Mono",Menlo,Consolas,monospace}
+  [data-theme="cockpit"]{--card-bg:#0e141f;--text:#cfe3ee;--text-2:#8fa6b5;--text-3:#5b6f7e;--border:#1d2a3a;--primary:#36e0ff;--primary-d:#1aa9c2;--success:#39ff8a;--warning:#ffb838;--danger:#ff4d5e;--info:#7fa8c0;--radius:2px;--shadow:0 0 0 1px rgba(54,224,255,.07),0 0 18px rgba(54,224,255,.05)}
+  [data-theme="cockpit"] .topbar,[data-theme="cockpit"] .card,[data-theme="cockpit"] .inputbar,[data-theme="cockpit"] .steps,[data-theme="cockpit"] .mini,[data-theme="cockpit"] .fnode{background:var(--card-bg);border-color:var(--border);font-family:"SF Mono",Menlo,Consolas,monospace}
+  [data-theme="cockpit"] .brand,[data-theme="cockpit"] .colhead b,[data-theme="cockpit"] .card h3{color:var(--primary);text-transform:uppercase;letter-spacing:1.2px;font-size:12px}
+  [data-theme="cockpit"] .card{box-shadow:0 0 0 1px rgba(54,224,255,.09),0 0 18px rgba(54,224,255,.04)}
+  [data-theme="cockpit"] .tag{background:rgba(54,224,255,.08);color:var(--primary);border:1px solid rgba(54,224,255,.32)}
+  [data-theme="cockpit"] .tag.s{background:rgba(57,255,138,.08);color:var(--success);border-color:rgba(57,255,138,.32)}
+  [data-theme="cockpit"] .tag.w{background:rgba(255,184,56,.09);color:var(--warning);border-color:rgba(255,184,56,.34)}
+  [data-theme="cockpit"] .tag.d{background:rgba(255,77,94,.11);color:var(--danger);border-color:rgba(255,77,94,.38)}
+  [data-theme="cockpit"] .tag.i{background:rgba(127,168,192,.08);color:var(--info);border-color:rgba(127,168,192,.32)}
+  [data-theme="cockpit"] .tag.big{box-shadow:0 0 14px currentColor}
+  [data-theme="cockpit"] .colhead{border-bottom-color:var(--primary)}
+  [data-theme="cockpit"] .colhead .badge{background:rgba(54,224,255,.15);color:var(--primary)}
+  [data-theme="cockpit"] .map{background:#0a1018}
+  [data-theme="cockpit"] .assess-banner{background:linear-gradient(180deg,rgba(255,184,56,.13),#0e141f);border-color:rgba(255,184,56,.42)}
+  [data-theme="cockpit"] .assess-banner.sev-uncertain{background:linear-gradient(180deg,rgba(127,168,192,.13),#0e141f);border-color:rgba(127,168,192,.42)}
+  [data-theme="cockpit"] input,[data-theme="cockpit"] select{background:#0a1018;border-color:#1d2a3a;color:#cfe3ee}
+  [data-theme="cockpit"] .btn{background:var(--primary);color:#03121a;font-weight:700;box-shadow:0 0 14px rgba(54,224,255,.45)}
+  [data-theme="cockpit"] .farrow{color:var(--primary)}
+
+  /* minimal · 极简 */
+  [data-theme="minimal"] body{background:#fafafa}
+  [data-theme="minimal"]{--card-bg:#fff;--text:#111;--text-2:#555;--text-3:#9ca3af;--border:#f0f0f0;--primary:#4f46e5;--primary-d:#4338ca;--success:#10b981;--warning:#f59e0b;--danger:#ef4444;--info:#9ca3af;--radius:16px;--shadow:0 1px 3px rgba(0,0,0,.05)}
+  [data-theme="minimal"] .card,[data-theme="minimal"] .inputbar,[data-theme="minimal"] .steps{border:none;box-shadow:0 1px 3px rgba(0,0,0,.05);border-radius:16px;background:#fff}
+  [data-theme="minimal"] .mini{background:#fafafa;border:none}
+  [data-theme="minimal"] .topbar{border-bottom:none;background:#fafafa}
+  [data-theme="minimal"] .colhead{border-bottom:none}
+  [data-theme="minimal"] .colhead .badge{background:var(--primary);border-radius:8px}
+  [data-theme="minimal"] .tag{background:#eef2ff;color:var(--primary);border:none;border-radius:999px;padding:2px 10px}
+  [data-theme="minimal"] .tag.s{background:#ecfdf5;color:#0f9d6b}
+  [data-theme="minimal"] .tag.w{background:#fffbeb;color:#c47d0a}
+  [data-theme="minimal"] .tag.d{background:#fef2f2;color:#dc2626}
+  [data-theme="minimal"] .tag.i{background:#f3f4f6;color:#6b7280}
+  [data-theme="minimal"] .assess-banner{background:#fff;border:none;border-radius:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  [data-theme="minimal"] .map{border-radius:16px}
+  [data-theme="minimal"] .btn{background:var(--primary)}
 </style>
 </head>
 <body>
@@ -481,23 +534,24 @@ function renderC(r){
   </div>`;
 }
 
-/* ── router / switcher ── */
-const VARIANTS=[
-  {key:"A",name:"Stepper Dashboard",render:renderA},
-  {key:"B",name:"Three Columns 看/知/判",render:renderB},
-  {key:"C",name:"Reasoning Stream",render:renderC},
+/* ── router / switcher — 布局锁定 B，切换视觉风格 ── */
+const STYLES=[
+  {key:"premium",name:"高级感 Premium"},
+  {key:"cockpit",name:"驾驶舱 Cockpit"},
+  {key:"minimal",name:"极简 Minimal"},
 ];
-function curKey(){ return new URLSearchParams(location.search).get("variant")||"A"; }
+function curKey(){ return new URLSearchParams(location.search).get("style")||"premium"; }
 function render(){
   const key=curKey();
-  const v=VARIANTS.find(x=>x.key===key)||VARIANTS[0];
-  document.getElementById("app").innerHTML = v.render(currentResult());
-  document.getElementById("vlabel").innerHTML = `<b>${v.key}</b> — ${v.name}`;
+  const s=STYLES.find(x=>x.key===key)||STYLES[0];
+  document.body.dataset.theme=s.key;
+  document.getElementById("app").innerHTML=renderB(currentResult());
+  document.getElementById("vlabel").innerHTML=`<b>${s.key.toUpperCase()}</b> — ${s.name}`;
 }
 function cycle(d){
-  const i=VARIANTS.findIndex(v=>v.key===curKey());
-  const n=VARIANTS[(i+d+VARIANTS.length)%VARIANTS.length];
-  const u=new URL(location); u.searchParams.set("variant",n.key); history.replaceState(null,"",u);
+  const i=STYLES.findIndex(s=>s.key===curKey());
+  const n=STYLES[(i+d+STYLES.length)%STYLES.length];
+  const u=new URL(location); u.searchParams.set("style",n.key); history.replaceState(null,"",u);
   render();
 }
 document.getElementById("next").onclick=()=>cycle(1);
