@@ -82,6 +82,12 @@
   .colhead .badge{font-size:12px;color:#fff;background:var(--primary);padding:1px 8px;border-radius:10px}
   .mini{background:#fafbfc;border:1px solid var(--border);border-radius:4px;padding:10px;margin-bottom:10px}
   .mini h4{font-size:13px;color:var(--text-2);margin-bottom:6px}
+  /* evidence flow (variant B) — complete chain, horizontal wrap, no vertical bloat */
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:6px}
+  .fnode{border:1px solid var(--border);border-left-width:3px;border-radius:6px;padding:6px 9px;font-size:12px;background:#fafbfc;min-width:96px;line-height:1.45}
+  .fnode .ftype{font-weight:600;font-size:11px;margin-bottom:3px}
+  .fnode .fline{color:var(--text-2)}
+  .farrow{display:flex;align-items:center;color:var(--text-3);font-size:18px;font-weight:700}
   /* variant C stream */
   .stream{max-width:760px;margin:0 auto}
   .bubble{position:relative;padding:14px 18px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:14px}
@@ -346,6 +352,36 @@ function evidenceTimeline(r){
   </div></div>`;
 }
 
+/* complete horizontal evidence flow (variant B) — 每节点带具体引用，箭头串联，横向换行不增高 */
+function chainFlow(r){
+  const segs=[];
+  const o=r.observation.waterlogging;
+  segs.push({type:"observation",label:"画面观察",lines:[`${L("waterlogging_status",o.status)} · ${L("waterlogging_level",o.waterlogging_level)}`,`影响 ${L("visual_impact_hint",o.visual_impact_hint)}`]});
+  if(r.grounding.status==="grounded"){
+    const m=r.grounding.best_match;
+    segs.push({type:"grounding",label:"道路定位",lines:[m.road_name,`${m.highway} · ${m.lanes}车道 · 偏移 ${m.match_distance_m}m`]});
+  }
+  const tBlk=r.context.blocks.find(b=>b.block_type==="terrain"&&b.availability.status==="available");
+  const eBlk=r.context.blocks.find(b=>b.block_type==="elevation"&&b.availability.status==="available");
+  if(tBlk||eBlk){
+    const lines=[];
+    if(tBlk) lines.push(`TPI 复合 ${tBlk.lowness.composite}m → ${L("lowness_class",tBlk.lowness.lowness_class)}`);
+    if(eBlk) lines.push(`点高程 ${eBlk.elevation_pt}m（mean ${eBlk.stats.mean}）`);
+    segs.push({type:"context",label:"城市数据",lines});
+  }
+  r.knowledge.knowledge_items.forEach(it=>{
+    segs.push({type:"derived",label:it.mechanism==="rule"?`规则派生 · ${it.rule_id}`:`模型推断 · ${L("knowledge_type",it.knowledge_type)}`,lines:[it.statement.length>34?it.statement.slice(0,33)+"…":it.statement]});
+  });
+  if(r.knowledge.event_assessment){
+    const ea=r.knowledge.event_assessment;
+    segs.push({type:"assessment",label:"事件判定",lines:[L("event_severity",ea.severity),`置信度 ${L("overall_confidence",ea.confidence)}`]});
+  }
+  const color={observation:"#9c27b0",grounding:"#909399",context:"#67c23a",derived:"#e6a23c",assessment:"#f56c6c"};
+  return `<div class="card"><h3>🔗 完整证据链</h3><div class="flow">
+    ${segs.map((s,i)=>`<div class="fnode" style="border-left-color:${color[s.type]}"><div class="ftype" style="color:${color[s.type]}">${s.label}</div>${s.lines.map(l=>`<div class="fline">${l}</div>`).join("")}</div>${i<segs.length-1?'<div class="farrow">→</div>':''}`).join("")}
+  </div></div>`;
+}
+
 /* input bar mock */
 function inputBar(r){
   const loc = r.location ? `${r.location.raw_text} <span class="muted">(${r.location.lat}, ${r.location.lon})</span>` : `<span class="muted">（未提供位置）</span>`;
@@ -411,9 +447,7 @@ function renderB(r){
     <div>
       <div class="colhead"><span class="badge">3</span><b>这意味着 · What It Means</b></div>
       ${knowledgeView(r)}
-      <div class="card"><h3>证据链</h3>
-        ${(()=>{const ns=[];r.observation.waterlogging&&ns.push("画面观察");r.grounding.status==="grounded"&&ns.push("道路定位");r.context.blocks.some(b=>b.availability.status==="available")&&ns.push("城市数据");r.knowledge.knowledge_items.some(i=>i.mechanism==="rule")&&ns.push("规则派生");return ns.map(n=>`<span class="tag i">${n}</span>`).join(" ");})()}
-      </div>
+      ${chainFlow(r)}
     </div>
   </div>`;
 }
