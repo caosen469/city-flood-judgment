@@ -75,7 +75,7 @@ v1 仅 `road_waterlogging`。waterlogging 专属视觉字段全部收纳在 `wat
 - `overall_confidence`：本次 Observation 整体可靠性。
 
 ### 3.4 depth_estimate
-仅当存在可靠尺寸参照（路缘石、轮胎、标线等）时才填 `depth_cm`；否则全部 `null`，`waterlogging_level` 用 `LX`。深度可同时在 observation 级（整体）与逐 patch 级出现——一张图可同时存在浅水洼与较深路面水。PRD §4.13：不得无依据编造精确厘米数。
+`depth_cm` 仅在存在可靠尺寸参照（清晰水位线、路缘石、轮胎、标线等与水面的明确比例）时填写；无可靠参照时保持 `null`，不编造精确厘米数（PRD §4.13）。**但 `waterlogging_level` 不随之退化为 `LX`**：只要积水存在且视觉强度可辨，仍按可见强度给出**保守等级估计**（如 L2/L3）并标 `depth_estimate.confidence=low`——等级承载"估计"、厘米承载"测量"，二者分离。仅当**积水存在与否本身存疑**（极端模糊、夜间无光、镜头污渍遮挡、信号矛盾）时才用 `LX`（见 §4）。深度可同时在 observation 级（整体）与逐 patch 级出现——一张图可同时存在浅水洼与较深路面水。
 
 ### 3.5 visual_impact_hint（纯可见的影响提示）
 仅基于画面可见证据给出**描述性**提示（淹没标线、接近底盘等）。它**不是**交通影响判断——后者需结合道路 Context，属 Knowledge Engine 的 Inference（`traffic_risk`）。此字段满足"基于图片的基本分析"需求，同时守住 Observation/Inference 边界。
@@ -90,7 +90,7 @@ v1 仅 `road_waterlogging`。waterlogging 专属视觉字段全部收纳在 `wat
 
 ## 4. unknown / 不确定 / 部分结果（对应 PRD §3.9）
 
-- 枚举字段各带哨兵：`status → uncertain`、`waterlogging_level → LX`、`surface_condition → unknown`、`visual_impact_hint → unclear`；`confidence` 无 unknown（至少 `low`）。
+- 枚举字段各带哨兵：`status → uncertain`、`waterlogging_level → LX`、`surface_condition → unknown`、`visual_impact_hint → unclear`；`confidence` 无 unknown（至少 `low`）。其中 `waterlogging_level=LX` 含义已收窄——仅当**积水存在与否本身存疑**时使用（通常与 `status=uncertain` 并存），而非"有积水但缺尺寸参照"；后者仍给保守等级估计 + `low` 置信（见 §3.4）。
 - 数值估算（`depth_cm`）未知用 `null`。
 - 列表（参照物、替代解释等）无内容用空 `[]`。
 - 必需键一律出现；未知由值表达，绝不靠缺键。
