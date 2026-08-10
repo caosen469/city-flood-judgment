@@ -1,0 +1,91 @@
+{
+  "success": true,
+  "status": "uncertain",
+  "waterlogging_level": "LX",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "medium",
+  "raw": {
+    "waterlogging_status": "不确定",
+    "waterlogging_probability": 0.65,
+    "waterlogging_level": "LX",
+    "estimated_depth_cm": {
+      "min": null,
+      "max": null,
+      "most_likely": null
+    },
+    "confidence": "中",
+    "water_area_description": "画面主要区域，包括店铺门前的人行道、斑马线以及部分机动车道表面均呈现出强烈的镜面反光。这种反光使得路面看起来像是有积水，但在反光区域内部并未观察到明显的水波或水面边界。",
+    "scene_observations": {
+      "road_surface_condition": "疑似积水/潮湿",
+      "reflection_present": true,
+      "reflection_type": "潮湿路面反光/镜头成像异常",
+      "visible_water_boundary": false,
+      "visible_ripple_or_wave": false,
+      "visible_waterline": false
+    },
+    "reference_objects": [
+      {
+        "object": "雨伞行人腿部",
+        "known_size": "未知",
+        "visible_relation_to_water": "未观察到明显的涉水水位线，仅看到地面反光延伸至此人脚下",
+        "reliability": "低"
+      },
+      {
+        "object": "穿雨衣行人裤脚",
+        "known_size": "未知",
+        "visible_relation_to_water": "同样未见明显水花溅起，裤脚与地面接触处呈现暗色，但无法确定是湿润还是积水",
+        "reliability": "低"
+      }
+    ],
+    "visual_evidence": [
+      {
+        "evidence": "画面中大面积的路面（特别是右侧斑马线和左侧人行道）呈现出类似镜面的高亮反射，清晰地映照出天空和周围物体的倒影。",
+        "supports": "存在积水、潮湿路面",
+        "reliability": "高"
+      },
+      {
+        "evidence": "虽然下雨（行人撑伞），但路面上没有出现由车辆行驶激起的明显水花，也没有观察到雨水滴落形成的涟漪波纹。",
+        "supports": "可能是极浅的积水或仅是潮湿反光",
+        "reliability": "中"
+      },
+      {
+        "evidence": "画面整体色调偏灰暗且对比度较低，可能存在镜头起雾或光线漫射导致的成像模糊，这会增强‘积水感’。",
+        "supports": "镜头成像异常/误判可能",
+        "reliability": "中"
+      }
+    ],
+    "alternative_explanations": [
+      {
+        "possibility": "高度潮湿的反光路面",
+        "likelihood": "高",
+        "reason": "雨后路面完全湿透时，也会形成镜面效果，尤其在阴天光线下。如果没有足够深的水层，只是单纯的潮湿，视觉特征会非常相似。"
+      },
+      {
+        "possibility": "镜头起雾或脏污造成的反光错觉",
+        "likelihood": "中",
+        "reason": "图片显示有轻微的水汽感或镜头模糊，这会导致画面出现大面积的非自然高光或反光晕影，容易让人误以为路面有积水。"
+      }
+    ],
+    "traffic_risk": {
+      "pedestrian": "低",
+      "non_motor_vehicle": "低",
+      "motor_vehicle": "低"
+    },
+    "uncertainty_reasons": [
+      "缺乏清晰可见的水位线来区分干湿边界。",
+      "没有看到明显的雨滴击打水面产生的涟漪（可能是因为分辨率不足或雨势减弱）。",
+      "无法确定是否存在足够的深度导致车辆轮胎产生明显的动态飞溅。",
+      "图像质量受天气影响，存在眩光和可能的镜头污渍干扰。"
+    ],
+    "additional_data_needed": [
+      "拍摄于晴天干燥时的同一角度参考图。",
+      "近距离拍摄路边石或下水道口的照片，以确认是否有滞留水体。",
+      "视频流中的动态画面，观察是否有水流流动的迹象。"
+    ],
+    "conclusion": "根据视觉分析，当前画面中存在极强的路面反光，视觉上极度疑似积水。但由于缺乏明确的物理水位参照物（如被淹没的井盖边缘）、清晰的雨滴涟漪或明显的车辆涉水动态，且存在镜头成像可能造成的错觉，因此判定为“不确定”状态（LX）。建议实地排查或通过动态视频进一步确认是否为真实积水。"
+  }
+}

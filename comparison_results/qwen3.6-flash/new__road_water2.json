@@ -1,0 +1,92 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L2",
+  "depth_cm": {
+    "min": 3.0,
+    "max": 8.0,
+    "most_likely": 5.0
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L2",
+      "depth_estimate": {
+        "depth_cm": {
+          "min": 3.0,
+          "max": 8.0,
+          "most_likely": 5.0
+        },
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "wp_intersection_main",
+          "location_in_frame": "占据画面大部分区域，包括前景车道、十字路口中心及对向车道",
+          "coverage": "extensive",
+          "waterlogging_level": "L2",
+          "depth_cm": {
+            "min": 3.0,
+            "max": 8.0,
+            "most_likely": 5.0
+          }
+        },
+        {
+          "patch_id": "wp_edge_right",
+          "location_in_frame": "右侧交通岛（绿化隔离带）外侧边缘及人行道部分区域",
+          "coverage": "localized",
+          "waterlogging_level": "L3",
+          "depth_cm": {
+            "min": 5.0,
+            "max": 10.0,
+            "most_likely": 7.0
+          }
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": true,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": false
+      },
+      "reference_objects": [
+        {
+          "object": "电动车轮胎/踏板",
+          "known_size": "unknown",
+          "relation_to_water": "轮胎接触水面，路面有明显倒影",
+          "reliability": "high"
+        },
+        {
+          "object": "路面标线（导向箭头）",
+          "known_size": "standard",
+          "relation_to_water": "标线被水淹没但仍隐约可见，周围形成环状反光",
+          "reliability": "high"
+        }
+      ],
+      "visual_impact_hint": "obstructing",
+      "visual_evidence": [
+        {
+          "evidence": "大面积路面反光强烈，能倒映出天空及周边树木轮廓",
+          "supports": "存在至少L2级别的积水覆盖路面",
+          "reliability": "low"
+        },
+        {
+          "evidence": "前景电动车骑行者正在涉水通过，轮胎周围未见明显激溅水花（表明水深未没过轮毂中心）",
+          "supports": "水深在L2（3-10cm）范围内，属于常规雨天积水量级",
+          "reliability": "low"
+        }
+      ],
+      "alternative_explanations": [],
+      "uncertainty_reasons": []
+    },
+    "visible_location_text": "广东广州南沙 111省道与高沙路路口北向南 动球外路",
+    "observed_summary": "画面显示一个宽阔的城市道路交叉口，路面呈现明显的潮湿和积水状态。前景及路口区域的沥青路面覆盖着一层水膜，能够观察到天空及周围景物的水面倒影。右侧路边绿化带边缘可见少量积水漫溢迹象。多辆机动车和非机动车（如骑行者）正在涉水通行。"
+  }
+}

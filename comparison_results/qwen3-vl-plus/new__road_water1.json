@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L2",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.9,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L2",
+      "depth_estimate": {
+        "depth_cm": {},
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "1",
+          "location_in_frame": "路口斑马线及周边路面",
+          "coverage": "extensive",
+          "waterlogging_level": "L2",
+          "depth_cm": {}
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": true,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": true
+      },
+      "reference_objects": [],
+      "visual_impact_hint": "obstructing",
+      "visual_evidence": [
+        {
+          "evidence": "路面覆盖明显积水，颜色与干燥路面存在差异",
+          "supports": "存在积水",
+          "reliability": "medium"
+        },
+        {
+          "evidence": "行人及非机动车在积水中通行",
+          "supports": "存在积水",
+          "reliability": "high"
+        }
+      ],
+      "alternative_explanations": [],
+      "uncertainty_reasons": [
+        "缺乏可靠尺寸参照物用于深度精确估计"
+      ]
+    },
+    "visible_location_text": "广东广州南沙横核 镇南路2号红绿灯路口人脸东 固枪外冶",
+    "observed_summary": "路口处路面存在明显积水，覆盖斑马线及周边区域，行人及车辆在积水中通行"
+  }
+}

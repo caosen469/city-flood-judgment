@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "LX",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "low",
+  "raw": {
+    "waterlogging_status": "存在",
+    "waterlogging_probability": 0.95,
+    "waterlogging_level": "LX",
+    "estimated_depth_cm": {
+      "min": null,
+      "max": null,
+      "most_likely": null
+    },
+    "confidence": "低",
+    "water_area_description": "画面右侧的机动车道（沥青路面）大面积覆盖着明显的积水。水面高度似乎已经漫过了路边的草地边缘，几乎覆盖了整个车道表面，呈现出镜面反射状态。左侧的人行道砖面也有明显的水迹和反光，但未见如机动车道那样厚重的积水层。",
+    "scene_observations": {
+      "road_surface_condition": "明确积水",
+      "reflection_present": true,
+      "reflection_type": "水面倒影/潮湿路面反光",
+      "visible_water_boundary": false,
+      "visible_ripple_or_wave": true,
+      "visible_waterline": false
+    },
+    "reference_objects": [
+      {
+        "object": "红色卡车车轮",
+        "known_size": "大型货车轮胎高度约1米以上",
+        "visible_relation_to_water": "卡车正行驶在积水中，由于距离较远，无法清晰看到轮胎与水面交界处的具体水位线，但车身姿态正常，未见严重水花溅射。",
+        "reliability": "中"
+      },
+      {
+        "object": "路缘石/隔离带边缘",
+        "known_size": "一般路缘石高度约15-20厘米",
+        "visible_relation_to_water": "右侧道路边缘的草地与路面交界处模糊不清，积水似乎覆盖了部分路基边缘，但无法判断是否完全淹无路缘石。",
+        "reliability": "低"
+      },
+      {
+        "object": "非机动车警示牌立柱",
+        "known_size": "未知，通常地面部分高度约1.5米",
+        "visible_relation_to_water": "立柱底部位于人行道边缘与机动车道交界处，虽然立柱本身可见，但其与积水接触的具体点被水面反光遮挡，难以通过该参照物精确估算深度。",
+        "reliability": "低"
+      }
+    ],
+    "visual_evidence": [
+      {
+        "evidence": "机动车道路面呈现出连续、平滑且强烈的镜面反射效果，能倒映出天空、树木和车辆的光影，这是典型深面积水的特征。",
+        "supports": "存在积水",
+        "reliability": "高"
+      },
+      {
+        "evidence": "水面存在波纹，特别是在卡车行驶经过的区域，以及风吹过的区域，表明水体具有一定的流动性，而非静止的潮湿地面。",
+        "supports": "存在积水",
+        "reliability": "中"
+      },
+      {
+        "evidence": "路边植被（右侧草丛）根部附近的水面边界模糊，暗示积水可能有一定的深度，淹没了部分路基结构。",
+        "supports": "存在积水",
+        "reliability": "中"
+      }
+    ],
+    "alternative_explanations": [
+      {
+        "possibility": "雨后刚停，路面极度潮湿但未形成深水",
+        "likelihood": "低",
+        "reason": "路面反光的强度和连续性远超普通潮湿路面，且伴有波浪纹，更像是水体积聚而非单纯湿润。"
+      },
+      {
+        "possibility": "镜头雨滴或污渍造成局部模糊",
+        "likelihood": "低",
+        "reason": "虽然图片可能有轻微模糊，但主要积水区域的特征是连续的，且符合重力规律（路面凹陷处积水），不仅仅是成像异常。"
+      }
+    ],
+    "traffic_risk": {
+      "pedestrian": "低",
+      "non_motor_vehicle": "中",
+      "motor_vehicle": "高"
+    },
+    "uncertainty_reasons": [
+      "画面中缺乏清晰的近景水位参照物（如水尺、清晰的轮胎吃水深浅）。",
+      "远处的红色卡车处于行驶状态，其轮胎位置虽在水中，但因距离远和角度问题，无法准确测量积水相对于底盘的高度。",
+      "无法确定具体的水深数值，只能定性为“积水”，定量难度极大。",
+      "摄像机视角较高，导致水平面的视觉透视变形，增加了深度判断的难度。"
+    ],
+    "additional_data_needed": [
+      "拍摄机位下方的近景照片或视频，以获取更清晰的水位线。",
+      "现场人员报告的具体水深数据。",
+      "不同时间点的对比图，观察水位变化趋势。"
+    ],
+    "conclusion": "根据图像分析，右侧机动车道确实存在明显积水，水面具有连续镜面反射和波纹特征，等级判定为LX（疑似积水，证据不足估算深度）。积水已覆盖大部分车道宽度，可能对机动车涉水通行构成风险（特别是底盘较低的轿车），建议谨慎通行或绕行。"
+  }
+}

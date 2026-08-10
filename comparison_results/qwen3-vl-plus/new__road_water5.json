@@ -1,0 +1,70 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L2",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "low",
+    "presence_probability": 0.9,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L2",
+      "depth_estimate": {
+        "depth_cm": {},
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "1",
+          "location_in_frame": "道路中央及部分车道",
+          "coverage": "extensive",
+          "waterlogging_level": "L2",
+          "depth_cm": {}
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": true,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": true
+      },
+      "reference_objects": [
+        {
+          "object": "车辆",
+          "known_size": "unknown",
+          "relation_to_water": "车辆行驶于积水中",
+          "reliability": "low"
+        }
+      ],
+      "visual_impact_hint": "obstructing",
+      "visual_evidence": [
+        {
+          "evidence": "路面反光及车辆行驶溅起水花",
+          "supports": "存在积水",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "possibility": "潮湿路面反光",
+          "likelihood": "low",
+          "reason": "存在明显水花及积水反光，非单纯潮湿"
+        }
+      ],
+      "uncertainty_reasons": [
+        "缺乏明确水位线参照物"
+      ]
+    },
+    "visible_location_text": "广州南沙黄阁动球外怡黄阁南路交叉口西北50米梅山工业区东北",
+    "observed_summary": "雨天道路湿滑，路面有明显积水，车辆在积水中行驶，周围有树木和建筑物。"
+  }
+}

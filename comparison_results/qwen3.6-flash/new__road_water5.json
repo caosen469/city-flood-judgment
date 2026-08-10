@@ -1,0 +1,77 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L2",
+  "depth_cm": {
+    "min": 3.0,
+    "max": 10.0,
+    "most_likely": 5.0
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L2",
+      "depth_estimate": {
+        "depth_cm": {
+          "min": 3.0,
+          "max": 10.0,
+          "most_likely": 5.0
+        },
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "wp_1",
+          "location_in_frame": "道路路面区域，覆盖大部分车道",
+          "coverage": "extensive",
+          "waterlogging_level": "L2",
+          "depth_cm": {
+            "min": 3.0,
+            "max": 10.0,
+            "most_likely": 5.0
+          }
+        }
+      ],
+      "surface_condition": "wet",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "wet_road_glare",
+        "visible_water_boundary": false,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": false
+      },
+      "reference_objects": [],
+      "visual_impact_hint": "obstructing",
+      "visual_evidence": [
+        {
+          "evidence": "路面大面积潮湿反光，倒影明显",
+          "supports": "存在积水/路面潮湿",
+          "reliability": "high"
+        },
+        {
+          "evidence": "车辆经过水面产生轻微水花和涟漪",
+          "supports": "存在积水（较浅）",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "possibility": "路面材质导致的镜面反射",
+          "likelihood": "low",
+          "reason": "路面看起来是沥青或混凝土，通常干燥时不会如此均匀高亮。但在特定角度下可能模拟类似效果。"
+        }
+      ],
+      "uncertainty_reasons": [
+        "缺乏明确的水位线参照物（如路缘石水位线）",
+        "无法精确判断水深是否足以淹没轮胎"
+      ]
+    },
+    "visible_location_text": "广东广州南沙黄阁...梅山工业区...",
+    "observed_summary": "画面显示一条潮湿的道路，路面有积水反光，一辆黑色SUV正在积水中行驶，车轮溅起水花。远处可见另一辆白色车辆也在涉水。路边植被茂盛，天空阴沉，疑似雨天。"
+  }
+}

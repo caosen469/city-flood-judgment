@@ -1,0 +1,73 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L3",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L3",
+      "depth_estimate": {
+        "depth_cm": {},
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "patch_1",
+          "location_in_frame": "道路主干道区域",
+          "coverage": "extensive",
+          "waterlogging_level": "L3",
+          "depth_cm": {}
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": false,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": true
+      },
+      "reference_objects": [
+        {
+          "object": "白色SUV",
+          "known_size": "unknown",
+          "relation_to_water": "部分车轮浸没在水中",
+          "reliability": "low"
+        },
+        {
+          "object": "黑色轿车",
+          "known_size": "unknown",
+          "relation_to_water": "部分车轮浸没在水中",
+          "reliability": "low"
+        }
+      ],
+      "visual_impact_hint": "submerging",
+      "visual_evidence": [
+        {
+          "evidence": "道路表面大面积积水，车辆行驶产生明显水花",
+          "supports": "存在明显积水",
+          "reliability": "high"
+        },
+        {
+          "evidence": "水面可见波纹及倒影",
+          "supports": "积水深度至少达到L3级别",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [],
+      "uncertainty_reasons": []
+    },
+    "visible_location_text": "广州南沙鱼窝头 南沙大道自贸区拱门北侧1",
+    "observed_summary": "道路主干道被大量积水覆盖，两辆汽车正在积水中行驶，水面可见波纹和反光"
+  }
+}

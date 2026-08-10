@@ -1,0 +1,94 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L4",
+  "depth_cm": {
+    "min": 20.0,
+    "max": 30.0,
+    "most_likely": 25.0
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "high",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L4",
+      "depth_estimate": {
+        "depth_cm": {
+          "min": 20.0,
+          "max": 30.0,
+          "most_likely": 25.0
+        },
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "WP_ROAD_CENTER",
+          "location_in_frame": "道路中心至左侧区域，覆盖整个可视路面",
+          "coverage": "extensive",
+          "waterlogging_level": "L4",
+          "depth_cm": {
+            "min": 20.0,
+            "max": 30.0,
+            "most_likely": 25.0
+          }
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "wet_road_glare",
+        "visible_water_boundary": false,
+        "visible_waterline": true,
+        "visible_ripple_or_wave": true
+      },
+      "reference_objects": [
+        {
+          "object": "白色轿车（左中位置）",
+          "known_size": "约1.45米（半轴距）",
+          "relation_to_water": "水淹至车身下沿/轮眉处，激起明显涟漪",
+          "reliability": "high"
+        },
+        {
+          "object": "前景黑色轿车（底部）",
+          "known_size": "约1.4米（前引擎盖离地高度估算）",
+          "relation_to_water": "水面淹没前挡风玻璃下方/雨刮器区域",
+          "reliability": "medium"
+        }
+      ],
+      "visual_impact_hint": "submerging",
+      "visual_evidence": [
+        {
+          "evidence": "白色轿车下半身完全没入水中且产生大量水波",
+          "supports": "积水深度至少超过轮毂，接近车身底板（L3-L4）",
+          "reliability": "high"
+        },
+        {
+          "evidence": "路面整体呈现镜面反射，光线漫反射严重",
+          "supports": "存在大范围静止/缓流动水体",
+          "reliability": "high"
+        },
+        {
+          "evidence": "右侧黄色工程车轮胎部分被遮挡",
+          "supports": "积水覆盖路基表面",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "possibility": "高反光湿滑路面",
+          "likelihood": "low",
+          "reason": "车辆激起的涟漪和车身水线表明非单纯表面潮湿"
+        }
+      ],
+      "uncertainty_reasons": [
+        "缺乏精确标尺参照物，厘米级估计依赖经验推断"
+      ]
+    },
+    "visible_location_text": "广东 广州 南沙 鱼窝头 南沙大道自贸区拱门北侧",
+    "observed_summary": "图中展示了一条严重积水的城市道路。路面上有清晰的积水波纹和明显的倒影。一辆白色小汽车在画面中段行驶，其车轮和底盘已被水淹没，周围激起显著的水花和涟漪。前景可见另一辆深色车辆的车顶和部分车窗，水面已逼近其前挡风玻璃下沿。右侧停放有一辆黄色大型工程车，路边建筑清晰可见。"
+  }
+}

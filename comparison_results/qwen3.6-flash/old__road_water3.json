@@ -1,0 +1,77 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L4",
+  "depth_cm": {
+    "min": 15,
+    "max": 35,
+    "most_likely": 25
+  },
+  "confidence": "high",
+  "raw": {
+    "waterlogging_status": "存在",
+    "waterlogging_probability": 0.95,
+    "waterlogging_level": "L4",
+    "estimated_depth_cm": {
+      "min": 15,
+      "max": 35,
+      "most_likely": 25
+    },
+    "confidence": "高",
+    "water_area_description": "画面中整个行车道区域均被积水覆盖。积水范围从前景一直延伸至背景，水面呈现连续的镜面反射效果，清晰地倒映出天空、树木和右侧建筑物的轮廓。左侧草坪边缘的路缘石部分没入水中（或紧贴水面），右侧工程车辆轮胎下半部处于积水中。",
+    "scene_observations": {
+      "road_surface_condition": "明确积水",
+      "reflection_present": true,
+      "reflection_type": "水面倒影",
+      "visible_water_boundary": true,
+      "visible_ripple_or_wave": false,
+      "visible_waterline": false
+    },
+    "reference_objects": [
+      {
+        "object": "白色轿车",
+        "known_size": "约1.7米高，轮胎直径约0.7米",
+        "visible_relation_to_water": "车辆正在涉水行驶，水面高度明显超过轮胎下沿，接近轮毂下部和车门下缘，且车头前方有明显的水波纹（bow wave），表明水深足以对车轮产生较大阻力。",
+        "reliability": "高"
+      },
+      {
+        "object": "黄色工程卡车",
+        "known_size": "标准卡车轮胎直径约1米-1.2米",
+        "visible_relation_to_water": "停在路边，轮胎下半部分似乎被水淹没或浸泡，车身底部离地间隙处可见水面。",
+        "reliability": "中"
+      }
+    ],
+    "visual_evidence": [
+      {
+        "evidence": "白色轿车在道路中央行驶，车头激起的明显水波显示水流深度已覆盖轮胎下半部并达到车底护板位置。",
+        "supports": "存在积水且深度可能达到L4级别",
+        "reliability": "高"
+      },
+      {
+        "evidence": "路面形成大面积连续镜面，完整倒映出天空亮度和右侧建筑的窗户结构，符合深水区特征而非简单潮湿反光。",
+        "supports": "存在积水",
+        "reliability": "高"
+      },
+      {
+        "evidence": "左侧路缘石与水面交界处模糊不清，暗示水位较高，接近或覆盖了路缘石顶部排水口区域。",
+        "supports": "存在积水",
+        "reliability": "中"
+      }
+    ],
+    "alternative_explanations": [],
+    "traffic_risk": {
+      "pedestrian": "严重",
+      "non_motor_vehicle": "严重",
+      "motor_vehicle": "高"
+    },
+    "uncertainty_reasons": [
+      "虽然参照物清晰，但具体水位线相对于车辆底盘的具体高度无法精确量化，只能给出区间估算。",
+      "路面材质（沥青/混凝土）对反光的影响需结合水波特征综合判断，此处主要依据水波和倒影形态排除单纯潮湿的可能。"
+    ],
+    "additional_data_needed": [
+      "需要知道该路段的标准路缘石高度以辅助计算绝对水深。",
+      "需要参考无积水时的基准图片以区分路面纹理与水面波纹。"
+    ],
+    "conclusion": "根据视觉证据，判定画面中道路存在明显积水。依据白色轿车涉水时的水波及车身浸水比例推断，积水深度可能在15至35厘米之间，等级约为L4（深积水）。此时机动车通行存在熄火和失控风险，行人和非机动车完全无法通行。"
+  }
+}

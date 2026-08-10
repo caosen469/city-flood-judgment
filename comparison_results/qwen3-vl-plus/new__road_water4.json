@@ -1,0 +1,70 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L2",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "low",
+    "presence_probability": 0.9,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L2",
+      "depth_estimate": {
+        "depth_cm": {},
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "patch_0",
+          "location_in_frame": "校门口入口及周边道路区域",
+          "coverage": "localized",
+          "waterlogging_level": "L2",
+          "depth_cm": {}
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": false,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": false
+      },
+      "reference_objects": [
+        {
+          "object": "车辆",
+          "known_size": "unknown",
+          "relation_to_water": "停在积水区域外",
+          "reliability": "low"
+        }
+      ],
+      "visual_impact_hint": "minor",
+      "visual_evidence": [
+        {
+          "evidence": "路面存在明显倒影和反光",
+          "supports": "存在积水",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [
+        {
+          "possibility": "潮湿路面反光",
+          "likelihood": "low",
+          "reason": "存在清晰倒影，非单纯路面反光"
+        }
+      ],
+      "uncertainty_reasons": [
+        "缺乏可靠尺寸参照物"
+      ]
+    },
+    "visible_location_text": "广州南沙 榄核 滘新路70号江山艺术学校门口",
+    "observed_summary": "校门口入口及周边道路区域可见明显积水，水面有建筑物倒影，路面湿滑。"
+  }
+}

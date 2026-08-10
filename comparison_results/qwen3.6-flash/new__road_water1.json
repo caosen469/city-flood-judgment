@@ -1,0 +1,114 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L2",
+  "depth_cm": {
+    "min": 3.0,
+    "max": 10.0,
+    "most_likely": 5.0
+  },
+  "confidence": "medium",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L2",
+      "depth_estimate": {
+        "depth_cm": {
+          "min": 3.0,
+          "max": 10.0,
+          "most_likely": 5.0
+        },
+        "confidence": "medium"
+      },
+      "water_patches": [
+        {
+          "patch_id": "WP-001",
+          "location_in_frame": "前景人行道区域",
+          "coverage": "moderate",
+          "waterlogging_level": "L2",
+          "depth_cm": {
+            "min": 3.0,
+            "max": 8.0,
+            "most_likely": 5.0
+          }
+        },
+        {
+          "patch_id": "WP-002",
+          "location_in_frame": "背景机动车道及斑马线区域",
+          "coverage": "extensive",
+          "waterlogging_level": "L2",
+          "depth_cm": {
+            "min": 2.0,
+            "max": 6.0,
+            "most_likely": 3.0
+          }
+        },
+        {
+          "patch_id": "WP-003",
+          "location_in_frame": "左侧店铺门口区域",
+          "coverage": "localized",
+          "waterlogging_level": "L2",
+          "depth_cm": {
+            "min": 2.0,
+            "max": 7.0,
+            "most_likely": 4.0
+          }
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": true,
+        "visible_waterline": true,
+        "visible_ripple_or_wave": false
+      },
+      "reference_objects": [
+        {
+          "object": "撑伞行人",
+          "known_size": "approx. 170cm height",
+          "relation_to_water": "Stands in water; hem of raincoat/wet shoes contact surface",
+          "reliability": "medium"
+        },
+        {
+          "object": "骑电动车路人",
+          "known_size": "approx. 1.2m wheel diameter",
+          "relation_to_water": "Wheels submerged or partially submerged in water on road surface",
+          "reliability": "medium"
+        },
+        {
+          "object": "停放的电动自行车",
+          "known_size": "wheel height approx. 70cm",
+          "relation_to_water": "Standing on wet pavement near water accumulation",
+          "reliability": "medium"
+        }
+      ],
+      "visual_impact_hint": "minor",
+      "visual_evidence": [
+        {
+          "evidence": "前景人行道地砖上形成镜面反射，能清晰倒映出撑伞行人的下半身轮廓，表明水深至少覆盖鞋底并有静止水面。",
+          "supports": "Clear water presence, level L2 minimum",
+          "reliability": "high"
+        },
+        {
+          "evidence": "远处斑马线区域的沥青路面呈现深色饱和状态，并有长条状反光，指示路面完全湿透且有较薄的水层覆盖标线。",
+          "supports": "Road wetness, potential shallow water",
+          "reliability": "high"
+        },
+        {
+          "evidence": "撑伞行人裤脚湿润痕迹明显，且在水面上未出现明显波纹，说明水流速度缓慢，主要是积水而非急流。",
+          "supports": "Still water accumulation",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [],
+      "uncertainty_reasons": []
+    },
+    "visible_location_text": "广东广州南沙榄核镇南路2号红绿灯路口人脸东",
+    "observed_summary": "图像显示雨天城市道路场景。路面大面积反光且颜色明显变深。前景人行道铺设地砖，有明显的积水反射倒影，行人站立处水面平静。背景机动车道被护栏分隔，路面湿滑且有积水，斑马线清晰可见但表面覆盖水层。有行人撑伞和穿雨衣涉水。路边店铺门口地面有明显反光。整体显示路面存在明显的积水现象。"
+  }
+}
