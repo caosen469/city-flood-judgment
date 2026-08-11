@@ -1,0 +1,62 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L3",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "low",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L3",
+      "depth_estimate": {
+        "depth_cm": {},
+        "confidence": "low"
+      },
+      "water_patches": [
+        {
+          "patch_id": "patch_1",
+          "location_in_frame": "主干道及右侧人行道区域",
+          "coverage": "extensive",
+          "waterlogging_level": "L3",
+          "depth_cm": {}
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": true,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": true
+      },
+      "reference_objects": [],
+      "visual_impact_hint": "submerging",
+      "visual_evidence": [
+        {
+          "evidence": "道路表面存在明显积水，水面覆盖路面并形成波纹",
+          "supports": "存在积水",
+          "reliability": "medium"
+        },
+        {
+          "evidence": "红色卡车行驶过程中车轮部分浸入水中",
+          "supports": "积水深度可能影响车辆通行",
+          "reliability": "low"
+        }
+      ],
+      "alternative_explanations": [],
+      "uncertainty_reasons": [
+        "缺乏明确参照物进行精确深度测量"
+      ]
+    },
+    "visible_location_text": "广东广州南沙龙穴",
+    "observed_summary": "道路及人行道区域存在明显积水，水面覆盖路面并形成波纹，红色卡车正在积水中行驶。"
+  }
+}

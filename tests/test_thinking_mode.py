@@ -4,7 +4,10 @@
 resolve_thinking_choice 与 classify_model 的单元测试。
 
 覆盖三档模型分类（ALWAYS / HYBRID / NON）与 `--thinking {auto,on,off}`
-的完整交叉语义。无网络依赖，可通过 `python -m unittest tests/test_thinking_mode -v` 运行。
+的完整交叉语义。无网络依赖，可通过 `python -m unittest tests.test_thinking_mode -v` 运行。
+
+被测函数原住 `src/waterlogging.py`，ADR-0005 §7 重构后抽至 `src/vlm/client.py`
+（Stage 1 / observation 生成与后续 LLM 阶段共用）。本测试继续守护该交叉表。
 """
 
 from __future__ import annotations
@@ -16,7 +19,7 @@ from pathlib import Path
 # 将 src/ 加入模块搜索路径，以便导入主程序。
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from waterlogging import (
+from vlm.client import (
     ALWAYS_THINKING_MODELS,
     HYBRID_THINKING_MODELS,
     classify_model,

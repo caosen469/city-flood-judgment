@@ -1,0 +1,213 @@
+{
+  "model": "qwen3.6-flash",
+  "thinking": "auto",
+  "images": [
+    "road_water1.jpg",
+    "road_water2.jpg",
+    "road_water3.jpg",
+    "road_water4.jpg",
+    "road_water5.jpg",
+    "road_water6.jpg"
+  ],
+  "prompts": {
+    "old": "旧 prompt（#18 前）",
+    "new": "新 prompt（#18 后）"
+  },
+  "per_image": {
+    "old": {
+      "road_water1": {
+        "success": true,
+        "status": "uncertain",
+        "level": "LX",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "medium"
+      },
+      "road_water2": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 10,
+          "max": 20,
+          "most_likely": 15
+        },
+        "confidence": "medium"
+      },
+      "road_water3": {
+        "success": true,
+        "status": "present",
+        "level": "L4",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 15,
+          "max": 35,
+          "most_likely": 25
+        },
+        "confidence": "high"
+      },
+      "road_water4": {
+        "success": true,
+        "status": "present",
+        "level": "LX",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "medium"
+      },
+      "road_water5": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 3,
+          "max": 8,
+          "most_likely": 5
+        },
+        "confidence": "medium"
+      },
+      "road_water6": {
+        "success": true,
+        "status": "present",
+        "level": "LX",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      }
+    },
+    "new": {
+      "road_water1": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 3.0,
+          "max": 10.0,
+          "most_likely": 5.0
+        },
+        "confidence": "medium"
+      },
+      "road_water2": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 3.0,
+          "max": 8.0,
+          "most_likely": 5.0
+        },
+        "confidence": "low"
+      },
+      "road_water3": {
+        "success": true,
+        "status": "present",
+        "level": "L4",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 20.0,
+          "max": 30.0,
+          "most_likely": 25.0
+        },
+        "confidence": "low"
+      },
+      "road_water4": {
+        "success": false,
+        "error": "两步修复后仍无法解析/校验 Observation。\n首段错误：Observation 校验失败：2 validation errors for Observation\nwaterlogging.depth_estimate.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type\nwaterlogging.water_patches.0.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type\n修复后错误：Observation 校验失败：2 validation errors for Observation\nwaterlogging.depth_estimate.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type\nwaterlogging.water_patches.0.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type"
+      },
+      "road_water5": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 3.0,
+          "max": 10.0,
+          "most_likely": 5.0
+        },
+        "confidence": "low"
+      },
+      "road_water6": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 10.0,
+          "max": 20.0,
+          "most_likely": 15.0
+        },
+        "confidence": "medium"
+      }
+    }
+  },
+  "aggregate": {
+    "old": {
+      "total": 6,
+      "success": 6,
+      "failure": 0,
+      "lx_count": 3,
+      "lx_rate": 0.5,
+      "level_distribution": {
+        "L0": 0,
+        "L1": 0,
+        "L2": 1,
+        "L3": 1,
+        "L4": 1,
+        "L5": 0,
+        "LX": 3
+      },
+      "cm_fill_count": 3,
+      "cm_fill_rate": 0.5,
+      "confidence_distribution": {
+        "high": 1,
+        "medium": 4,
+        "low": 1
+      },
+      "failures": []
+    },
+    "new": {
+      "total": 6,
+      "success": 5,
+      "failure": 1,
+      "lx_count": 0,
+      "lx_rate": 0.0,
+      "level_distribution": {
+        "L0": 0,
+        "L1": 0,
+        "L2": 3,
+        "L3": 1,
+        "L4": 1,
+        "L5": 0,
+        "LX": 0
+      },
+      "cm_fill_count": 5,
+      "cm_fill_rate": 1.0,
+      "confidence_distribution": {
+        "high": 0,
+        "medium": 2,
+        "low": 3
+      },
+      "failures": [
+        {
+          "image": "road_water4",
+          "error": "两步修复后仍无法解析/校验 Observation。\n首段错误：Observation 校验失败：2 validation errors for Observation\nwaterlogging.depth_estimate.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type\nwaterlogging.water_patches.0.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type\n修复后错误：Observation 校验失败：2 validation errors for Observation\nwaterlogging.depth_estimate.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type\nwaterlogging.water_patches.0.depth_cm\n  Input should be a valid dictionary or instance of DepthCm [type=model_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.10/v/model_type"
+        }
+      ]
+    }
+  }
+}

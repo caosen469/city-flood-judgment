@@ -1,0 +1,91 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "LX",
+  "depth_cm": {
+    "min": null,
+    "max": null,
+    "most_likely": null
+  },
+  "confidence": "medium",
+  "raw": {
+    "waterlogging_status": "存在",
+    "waterlogging_probability": 0.95,
+    "waterlogging_level": "LX",
+    "estimated_depth_cm": {
+      "min": null,
+      "max": null,
+      "most_likely": null
+    },
+    "confidence": "中",
+    "water_area_description": "积水覆盖了道路的大部分区域，包括右侧车道、行人入口坡道以及画面左下方的部分路面。水面从路边延伸至道路中央，形成了大面积的连续反射区。",
+    "scene_observations": {
+      "road_surface_condition": "疑似积水/明确积水",
+      "reflection_present": true,
+      "reflection_type": "水面倒影/潮湿路面反光",
+      "visible_water_boundary": false,
+      "visible_ripple_or_wave": false,
+      "visible_waterline": false
+    },
+    "reference_objects": [
+      {
+        "object": "右侧黄黑相间的警示柱",
+        "known_size": "标准尺寸（通常高度80-100cm）",
+        "visible_relation_to_water": "立柱底部完全没入水中，虽然无法看到具体水位线，但表明水已覆盖立柱根部。",
+        "reliability": "中"
+      },
+      {
+        "object": "路缘石（草地与道路交界）",
+        "known_size": "未知，通常为10-15cm",
+        "visible_relation_to_water": "路面水分似乎已经漫过或紧贴路缘石边缘，甚至轻微浸入草坪侧，暗示水深可能超过路缘石高度。",
+        "reliability": "低"
+      }
+    ],
+    "visual_evidence": [
+      {
+        "evidence": "路面呈现出非常清晰、连贯的镜面反射效果，倒映出远处的树木、天空和建筑物轮廓。这种清晰的镜像通常是静水层的特征，而非仅仅潮湿的路面。",
+        "supports": "存在积水",
+        "reliability": "高"
+      },
+      {
+        "evidence": "在右侧行人行走的区域，地面看起来完全被一层薄水膜或浅层积水覆盖，且行人鞋底附近未见明显的干燥边界。",
+        "supports": "存在积水 (L1-L2范围)",
+        "reliability": "中"
+      },
+      {
+        "evidence": "左侧停放的黑色轿车周围路面同样存在强烈的反光，且水势似乎向低处汇聚。",
+        "supports": "存在积水",
+        "reliability": "中"
+      }
+    ],
+    "alternative_explanations": [
+      {
+        "possibility": "严重潮湿的石材或沥青路面产生强反光",
+        "likelihood": "低",
+        "reason": "即使是严重潮湿的路面，其反光通常也是局部和不规则的，难以形成如此大面积且细节丰富（如树木轮廓）的连续倒影。这更符合具有几厘米深度静水的物理特性。"
+      },
+      {
+        "possibility": "镜头污渍或雨水导致的成像异常",
+        "likelihood": "低",
+        "reason": "图片整体清晰度较好，反光区域符合透视规律，没有明显的水滴干扰或镜头污损造成的伪影。"
+      }
+    ],
+    "traffic_risk": {
+      "pedestrian": "中",
+      "non_motor_vehicle": "中",
+      "motor_vehicle": "低"
+    },
+    "uncertainty_reasons": [
+      "缺乏能够直接显示水位高度的垂直参照物（如标尺或被淹没到特定刻度的物体）。",
+      "行人的脚部和车辆的轮胎并未完全浸入水中以提供直接的视觉水位线，只能依据路面反光形态进行推断。",
+      "无法准确判断积水的实际厚度是仅为一层水膜还是有更深的积水层，虽然反光提示有积水，但深度区间较难精确定量。"
+    ],
+    "additional_data_needed": [
+      "现场实测水深数据。",
+      "路缘石的具体高度参数。",
+      "该路段排水系统的状况说明。",
+      "周边其他类似天气条件下的无积水对比图片。"
+    ],
+    "conclusion": "根据路面呈现出的大范围、高保真的镜面反射及倒影细节，判定该区域确实存在真实积水，排除了单纯路面潮湿的可能。由于缺乏精确的深度参照系（如清晰的车轮半浸状态或明确的涉水标线），目前将积水等级定为“LX”（存在积水但证据不足以估算具体深度）。基于反光强度推测，水深可能在1-5厘米之间，对车辆通行风险较低，但对行人和非机动车可能存在打滑隐患。"
+  }
+}

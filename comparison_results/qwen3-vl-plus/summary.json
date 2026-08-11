@@ -1,0 +1,216 @@
+{
+  "model": "qwen3-vl-plus",
+  "thinking": "auto",
+  "images": [
+    "road_water1.jpg",
+    "road_water2.jpg",
+    "road_water3.jpg",
+    "road_water4.jpg",
+    "road_water5.jpg",
+    "road_water6.jpg"
+  ],
+  "prompts": {
+    "old": "旧 prompt（#18 前）",
+    "new": "新 prompt（#18 后）"
+  },
+  "per_image": {
+    "old": {
+      "road_water1": {
+        "success": true,
+        "status": "uncertain",
+        "level": "LX",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      },
+      "road_water2": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 10,
+          "max": 20,
+          "most_likely": 15
+        },
+        "confidence": "medium"
+      },
+      "road_water3": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": true,
+        "depth_cm": {
+          "min": 10,
+          "max": 20,
+          "most_likely": 15
+        },
+        "confidence": "medium"
+      },
+      "road_water4": {
+        "success": true,
+        "status": "absent",
+        "level": "L0",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "high"
+      },
+      "road_water5": {
+        "success": true,
+        "status": "absent",
+        "level": "L0",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "high"
+      },
+      "road_water6": {
+        "success": true,
+        "status": "present",
+        "level": "LX",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "medium"
+      }
+    },
+    "new": {
+      "road_water1": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      },
+      "road_water2": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      },
+      "road_water3": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      },
+      "road_water4": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      },
+      "road_water5": {
+        "success": true,
+        "status": "present",
+        "level": "L2",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      },
+      "road_water6": {
+        "success": true,
+        "status": "present",
+        "level": "L3",
+        "depth_cm_filled": false,
+        "depth_cm": {
+          "min": null,
+          "max": null,
+          "most_likely": null
+        },
+        "confidence": "low"
+      }
+    }
+  },
+  "aggregate": {
+    "old": {
+      "total": 6,
+      "success": 6,
+      "failure": 0,
+      "lx_count": 2,
+      "lx_rate": 0.333,
+      "level_distribution": {
+        "L0": 2,
+        "L1": 0,
+        "L2": 0,
+        "L3": 2,
+        "L4": 0,
+        "L5": 0,
+        "LX": 2
+      },
+      "cm_fill_count": 2,
+      "cm_fill_rate": 0.333,
+      "confidence_distribution": {
+        "high": 2,
+        "medium": 3,
+        "low": 1
+      },
+      "failures": []
+    },
+    "new": {
+      "total": 6,
+      "success": 6,
+      "failure": 0,
+      "lx_count": 0,
+      "lx_rate": 0.0,
+      "level_distribution": {
+        "L0": 0,
+        "L1": 0,
+        "L2": 3,
+        "L3": 3,
+        "L4": 0,
+        "L5": 0,
+        "LX": 0
+      },
+      "cm_fill_count": 0,
+      "cm_fill_rate": 0.0,
+      "confidence_distribution": {
+        "high": 0,
+        "medium": 0,
+        "low": 6
+      },
+      "failures": []
+    }
+  }
+}

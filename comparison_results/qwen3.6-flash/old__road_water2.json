@@ -1,0 +1,85 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L3",
+  "depth_cm": {
+    "min": 10,
+    "max": 20,
+    "most_likely": 15
+  },
+  "confidence": "medium",
+  "raw": {
+    "waterlogging_status": "存在",
+    "waterlogging_probability": 0.95,
+    "waterlogging_level": "L3",
+    "estimated_depth_cm": {
+      "min": 10,
+      "max": 20,
+      "most_likely": 15
+    },
+    "confidence": "中",
+    "water_area_description": "积水覆盖了整个道路交叉口及前景区域。水面明显漫过路缘石，淹没了路边的交通标志杆底座、黄色指示牌（前方施工/注意安全）以及红色雕塑的底部。道路标线被完全覆盖。画面前景的道路大面积被水淹没，水深足以形成明显的镜面反射，映出周围树木和建筑物的倒影。水面一直延伸到远处的路口，且与远处干燥路面有模糊的分界（受雨水和雾气影响）。",
+    "scene_observations": {
+      "road_surface_condition": "明确积水",
+      "reflection_present": true,
+      "reflection_type": "水面倒影",
+      "visible_water_boundary": true,
+      "visible_ripple_or_wave": false,
+      "visible_waterline": true
+    },
+    "reference_objects": [
+      {
+        "object": "交通标志杆底座及黄色标牌",
+        "known_size": "未知（但通常为固定标准高度，底座距地面约10-20cm，标牌中心更高）",
+        "visible_relation_to_water": "完全淹没，标牌下半部分不可见",
+        "reliability": "高"
+      },
+      {
+        "object": "路缘石",
+        "known_size": "通常高度为10-15cm",
+        "visible_relation_to_water": "已被淹没，水位明显高于路面",
+        "reliability": "高"
+      },
+      {
+        "object": "摩托车/电动车",
+        "known_size": "轮胎直径约60-70cm",
+        "visible_relation_to_water": "前景右侧摩托车的车轮几乎完全被淹没，后轮可能更深；左侧行驶中的车辆轮胎周围有明显阻力感或模糊，但未看到明显深水区导致熄火，说明水深在可控范围内但不浅。",
+        "reliability": "中"
+      }
+    ],
+    "visual_evidence": [
+      {
+        "evidence": "路边设施（标志杆、标牌）底部被水淹没，水位明显超过路缘石高度（通常>10cm）。",
+        "supports": "支持存在深度约10-20cm的积水，属于L3等级。",
+        "reliability": "高"
+      },
+      {
+        "evidence": "路面呈现强烈的镜面反射，清晰倒映出天空和树木，说明水面平静且有一定深度。",
+        "supports": "支持存在积水，且表面张力足够形成倒影，排除单纯潮湿。",
+        "reliability": "高"
+      },
+      {
+        "evidence": "道路标线完全不可见，被水体覆盖。",
+        "supports": "支持积水覆盖了车道宽度，水深至少几厘米以上。",
+        "reliability": "中"
+      }
+    ],
+    "alternative_explanations": [],
+    "traffic_risk": {
+      "pedestrian": "中",
+      "non_motor_vehicle": "高",
+      "motor_vehicle": "中"
+    },
+    "uncertainty_reasons": [
+      "雨水导致镜头可能存在轻微水珠或模糊，影响对最边缘水位线的判断。",
+      "远处能见度较低，无法准确判断积水范围的最远边界。",
+      "缺乏精确的水尺测量，深度估算基于物体相对位置推断，可能存在±5cm误差。"
+    ],
+    "additional_data_needed": [
+      "现场实时的水位尺读数。",
+      "更高分辨率的近景图片，观察具体车辆涉水后的底盘高度。",
+      "该路段的历史排水记录以确认是否为常见积水点。"
+    ],
+    "conclusion": "画面中存在明确且较严重的道路积水，积水已漫上路缘石并淹没路边设施底部，深度预估在10-20厘米之间（L3级）。非机动车通行风险较高，建议谨慎通过。"
+  }
+}

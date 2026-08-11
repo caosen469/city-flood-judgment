@@ -1,0 +1,241 @@
+openapi: 3.1.0
+info:
+  title: 城市积水知识理解 Demo API
+  version: 0.1.0
+  description: |
+    wayfinder #8 装配的 FastAPI 端点。决策依据见 docs/adr/0005-pipeline-architecture.md，
+    装配架构见 docs/architecture.md。
+
+    两个端点共享同一 `AnalysisResult` 形状：
+      - `POST /analyze`        —— 非流式，返回完整 `AnalysisResult`（JSON）。
+      - `POST /analyze/stream` —— SSE，逐阶段渐进展示，`done` 事件携带完整 `AnalysisResult`。
+
+    嵌套模型（Observation / GroundedEntity / UrbanContext / KnowledgeResult）的完整字段
+    以 `src/schemas/*.py` 的 Pydantic v2 模型为单一真值源；本规格给出其顶层形状与关键字段，
+    并在各 schema 的 description 标注来源文件与对应 ADR。
+servers:
+  - url: http://localhost:8000
+    description: 本地开发
+tags:
+  - name: analyze
+    description: 图像 → 积水事件知识 的分析接缝（PRD §5.2）
+
+paths:
+  /analyze:
+    post:
+      tags: [analyze]
+      summary: 非流式分析（完整 AnalysisResult）
+      description: |
+        同步执行 Stage 1→2→3，返回扁平 `AnalysisResult`。
+        VLM 硬失败 → 502；图片不可读 → 422；其余降级 graceful（见各模型字段）。
+      operationId: analyze
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AnalyzeRequest"
+      responses:
+        "200":
+          description: 分析完成（含 graceful 降级结果）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalysisResult"
+        "422":
+          description: 图片不可读 / 请求体非法
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "502":
+          description: VLM 上游失败（DashScope 超时 / 5xx / JSON 修复仍败）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /analyze/stream:
+    post:
+      tags: [analyze]
+      summary: 流式分析（SSE，逐阶段渐进展示）
+      description: |
+        Server-Sent Events 流。事件序列：
+
+          thinking*   —— reasoning_content 增量（仅思考型模型；载荷为文本片段）
+          stage       —— 每阶段完成各一发，按 observation → grounding → context → knowledge 顺序
+          done        —— 携带完整 AnalysisResult（权威聚合，与非流式同形）
+          error       —— 硬失败时一发，随后关闭（{code, message, stage}）
+
+        `thinking` 与 `stage` 事件提供渐进展示（What I See / What I Know / What It Means）；
+        客户端也可忽略它们，仅从 `done` 渲染。
+      operationId: analyzeStream
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AnalyzeRequest"
+      responses:
+        "200":
+          description: SSE 流
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: |
+                  SSE 事件流。每事件形如 `event: <type>\ndata: <json>\n\n`。
+                  各事件 data 载荷见 #/components/schemas/SseThinking / SseStage / SseDone / SseError。
+
+components:
+  schemas:
+
+    AnalyzeRequest:
+      type: object
+      description: |
+        分析请求。图片来源二选一：`image_url`（公网 URL）或 `image`（multipart 文件上传）。
+        `location` 可选；缺省时 grounding 为 unresolved(no_location)，pipeline 仍跑全三阶段。
+      properties:
+        image_url:
+          type: string
+          format: uri
+          description: 公网可访问的图片 URL（与 image 二选一）。
+        image:
+          type: string
+          format: binary
+          description: multipart 文件上传（与 image_url 二选一）。
+        location:
+          $ref: "#/components/schemas/LocationRefInput"
+      oneOf:
+        - required: [image_url]
+        - required: [image]
+
+    LocationRefInput:
+      type: object
+      description: 位置输入，镜像 LocationRef（src/schemas/observation.py）。全部字段可选。
+      properties:
+        lat:
+          type: number
+          format: double
+        lon:
+          type: number
+          format: double
+        road_name:
+          type: string
+          description: 显式道路名（作为 geocoded_text 的特例）。
+        raw_text:
+          type: string
+          description: 自由文本地名 / 画面 OSD 抄出的地名，交 Nominatim 解析。
+
+    AnalysisResult:
+      type: object
+      description: |
+        扁平顶层信封（ADR-0005）。降级从各嵌套模型字段读，不另设阶段包装：
+        grounding.status / context.blocks[].availability.status / knowledge.knowledge_items 缺项。
+      required: [request_id, observation, grounding, context, knowledge, timings]
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        observation:
+          $ref: "#/components/schemas/Observation"
+        grounding:
+          $ref: "#/components/schemas/GroundedEntity"
+        context:
+          $ref: "#/components/schemas/UrbanContext"
+        knowledge:
+          $ref: "#/components/schemas/KnowledgeResult"
+        timings:
+          type: object
+          additionalProperties:
+            type: number
+          description: 阶段耗时（毫秒）。键：observation / grounding / context / knowledge。
+
+    Observation:
+      type: object
+      description: |
+        结构化视觉观察（一图一个）。完整字段见 src/schemas/observation.py（ADR-0001）。
+        关键字段：phenomenon_type / overall_confidence / presence_probability /
+        waterlogging{status, waterlogging_level, depth_estimate, water_patches, surface_condition,
+        visual_cues, reference_objects, visual_impact_hint, visual_evidence, alternative_explanations,
+        uncertainty_reasons} / observed_summary / meta{observation_id, source_image, observed_at, source_location}。
+        "unknown" 由值表达（枚举哨兵 / 可空数值 / 空列表），非缺键。
+
+    GroundedEntity:
+      type: object
+      description: |
+        Grounding 产物。完整字段见 src/schemas/grounding.py（ADR-0003）。
+        关键字段：status(grounded|ambiguous|unresolved) / query_point / source /
+        best_match{osm_way_id, road_name, highway, bridge, tunnel, match_distance_m, confidence} /
+        candidates[] / unresolved_reason(out_of_buffer|outside_nansha|geocode_failed|no_location)。
+        unresolved 时 best_match/candidates 为空。
+
+    UrbanContext:
+      type: object
+      description: |
+        城市背景聚合。完整字段见 src/schemas/context.py（ADR-0002）。
+        关键字段：query_point{lat, lon} / blocks[]（判别 block_type）。
+        每个 block 自带 provenance{source, data_vintage, retrieved_at} 与
+        availability{status(available|unavailable|uncertain), reason}。
+        block_type ∈ {road, elevation, terrain}：
+          road{road_name, osm_way_id, highway_class, lanes, bridge, tunnel, offset_distance_m, ...}
+          elevation{elevation_pt, stats{min,max,mean,std,valid_pixels}}
+          terrain{lowness{micro, meso, macro, composite, lowness_class}}
+        Grounding unresolved 时 road block unavailable；elevation/terrain 视有无点位。
+
+    KnowledgeResult:
+      type: object
+      description: |
+        知识引擎产物。完整字段见 src/schemas/knowledge.py（ADR-0004）。
+        关键字段：knowledge_items[]（判别 knowledge_type ∈ {terrain_risk, road_impact}，每条带
+        statement / confidence / mechanism(rule|llm) / rule_id? / evidence[]≥1）/ event_assessment
+        {severity(ordinary_puddle|suspected_flood_significant|uncertain), confidence, mechanism, reasoning,
+        evidence[]} / explanation。
+        依赖缺失的 item 不在列表中（资格门，Case D/F）；EventAssessment 始终在、可判 uncertain。
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          enum: [unreadable_image, vlm_provider_error, vlm_json_invalid, internal_error]
+        message:
+          type: string
+        stage:
+          type: string
+          enum: [observation, grounding, context, knowledge]
+          description: 失败发生的阶段（若适用）。
+
+    # ---- SSE 事件载荷（data 字段的 JSON 形状）----
+
+    SseThinking:
+      type: object
+      description: thinking 事件 data（仅思考型模型；reasoning_content 增量片段）。
+      properties:
+        delta:
+          type: string
+
+    SseStage:
+      type: object
+      description: stage 事件 data（每阶段完成各一发，按 observation→grounding→context→knowledge）。
+      required: [stage, data, duration_ms]
+      properties:
+        stage:
+          type: string
+          enum: [observation, grounding, context, knowledge]
+        data:
+          description: 该阶段的输出模型（Observation / GroundedEntity / UrbanContext / KnowledgeResult 之一）。
+        duration_ms:
+          type: number
+
+    SseDone:
+      type: object
+      description: done 事件 data —— 完整 AnalysisResult，权威聚合，与非流式 /analyze 同形。
+      allOf:
+        - $ref: "#/components/schemas/AnalysisResult"
+
+    SseError:
+      type: object
+      description: error 事件 data —— 硬失败，发后关闭流。
+      allOf:
+        - $ref: "#/components/schemas/Error"

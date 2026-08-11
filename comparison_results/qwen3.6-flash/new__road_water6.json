@@ -1,0 +1,103 @@
+{
+  "success": true,
+  "status": "present",
+  "waterlogging_level": "L3",
+  "depth_cm": {
+    "min": 10.0,
+    "max": 20.0,
+    "most_likely": 15.0
+  },
+  "confidence": "medium",
+  "raw": null,
+  "observation": {
+    "phenomenon_type": "road_waterlogging",
+    "overall_confidence": "medium",
+    "presence_probability": 0.95,
+    "waterlogging": {
+      "status": "present",
+      "waterlogging_level": "L3",
+      "depth_estimate": {
+        "depth_cm": {
+          "min": 10.0,
+          "max": 20.0,
+          "most_likely": 15.0
+        },
+        "confidence": "medium"
+      },
+      "water_patches": [
+        {
+          "patch_id": "p1_main_road",
+          "location_in_frame": "右侧机动车道及中央隔离带边缘区域，积水覆盖了大部分路面，延伸至画面深处",
+          "coverage": "extensive",
+          "waterlogging_level": "L3",
+          "depth_cm": {
+            "min": 10.0,
+            "max": 20.0,
+            "most_likely": 15.0
+          }
+        },
+        {
+          "patch_id": "p2_sidewalk_edge",
+          "location_in_frame": "左侧砖铺人行道与车道交界处及部分低洼处，有局部明显水渍和水流痕迹",
+          "coverage": "localized",
+          "waterlogging_level": "L2",
+          "depth_cm": {
+            "min": 3.0,
+            "max": 8.0,
+            "most_likely": 5.0
+          }
+        }
+      ],
+      "surface_condition": "clear_water",
+      "visual_cues": {
+        "reflection_present": true,
+        "reflection_type": "water_reflection",
+        "visible_water_boundary": true,
+        "visible_waterline": false,
+        "visible_ripple_or_wave": true
+      },
+      "reference_objects": [
+        {
+          "object": "红色卡车轮胎/底盘",
+          "known_size": "large_truck_wheel_diameter ~1m",
+          "relation_to_water": "卡车正在积水中行驶，水花溅起，水面高度接近轮胎下沿或略高于路面结构层",
+          "reliability": "high"
+        },
+        {
+          "object": "隔离带石墩/阻车桩",
+          "known_size": "bollard_height ~0.7-0.8m",
+          "relation_to_water": "路中间草坪旁的金属阻车桩基座周围有明显积水环绕，部分被水淹没",
+          "reliability": "medium"
+        },
+        {
+          "object": "蓝色交通标志牌杆",
+          "known_size": "sign_post_base_visible",
+          "relation_to_water": "标志牌立在水淹区域的边缘草地中，其基座周围有水流汇集",
+          "reliability": "medium"
+        }
+      ],
+      "visual_impact_hint": "obstructing",
+      "visual_evidence": [
+        {
+          "evidence": "卡车行驶产生明显的浪花和尾流，证明水深足以覆盖车轮下部和路面结构",
+          "supports": "支持存在 L2-L3 级积水",
+          "reliability": "high"
+        },
+        {
+          "evidence": "路面呈现大面积镜面反光，且能看到清晰的车辆倒影和天空倒影",
+          "supports": "支持存在较深积水（L2及以上）",
+          "reliability": "medium"
+        },
+        {
+          "evidence": "排水口/路面交汇处有明显的湍流水流迹象",
+          "supports": "支持存在地表径流和积水",
+          "reliability": "medium"
+        }
+      ],
+      "alternative_explanations": [],
+      "uncertainty_reasons": []
+    },
+    "visible_location_text": "广东 广州 南沙 龙穴 龙穴大道中1号南260米杨帆路新龙大桥",
+    "observed_summary": "可见一处严重的道路积水场景。右侧宽阔的沥青路面完全被深积水覆盖，形成连续的水面，一辆红色集装箱卡车正在积水中低速行驶，激起明显浪花。水面深度目测至少在 10-20cm 左右（L3），能够淹没车轮底部并引起车辆航行阻力感。左侧人行步道边缘及与车道交界处亦有明显的积水汇入和漫溢现象。路边草地上的阻车桩、交通标志杆底部均处于水浸环境中。路面呈现出高质量的水面反射（倒影清晰）。整体积水范围覆盖了整个行车道，属于大范围严重积水。"
+  }
+}
