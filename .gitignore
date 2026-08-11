@@ -21,3 +21,6 @@ data/urban/*.gpkg
 data/urban/*.tif
 data/osmnx_cache/
 data/srtm_tiles/
+
+# 地理编码/检索运行时缓存
+cache/
